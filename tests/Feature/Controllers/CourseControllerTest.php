@@ -1,0 +1,92 @@
+<?php
+
+namespace Tests\Feature\Controllers;
+
+use App\Teacher;
+use App\Course;
+use App\Group;
+use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+class CourseControllerTest extends TestCase
+{
+    use RefreshDatabase;
+
+    /** @var string */
+    private $baseUrl = '/api/courses/';
+    /** @var Course */
+    private $course;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->course = new Course([
+            'name' => self::$faker->word,
+        ]);
+        $response = $this->postJson($this->baseUrl, $this->course->toArray());
+        $this->course->setAttribute('id', $response->json()['id']);
+    }
+
+    public function testInsertCourse()
+    {
+        $this->assertDatabaseHas('courses', ['name' => $this->course->getAttribute('name')]);
+    }
+
+    public function testListAllCourses()
+    {
+        $response = $this->get($this->baseUrl);
+        $response->assertJsonFragment(['name' => $this->course->getAttribute('name')]);
+    }
+
+    public function testListCourseById()
+    {
+        $uri = $this->baseUrl . $this->course->getAttribute('id');
+        $response = $this->get($uri);
+        $response->assertJsonFragment(['name' => $this->course->getAttribute('name')]);
+    }
+
+    public function testUpdateCourseById()
+    {
+        $uri = $this->baseUrl . $this->course->getAttribute('id');
+        $name = 'Changed name';
+        $response = $this->putJson($uri, ['name' => $name]);
+        $response->assertJsonFragment(['name' => $name]);
+    }
+
+    public function testDeleteCourseById()
+    {
+        $uri = $this->baseUrl . $this->course->getAttribute('id');
+        $response = $this->deleteJson($uri);
+        $response->assertSuccessful();
+        $response->assertSee('1'); // Api should return 1 if entity was successfully deleted
+    }
+
+    public function missedFieldsDataProvider()
+    {
+        return [
+            'no name' => [
+                new Course(),
+                'name'
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider missedFieldsDataProvider
+     * @param Course $teacher
+     */
+    public function testInsertCourseWithoutRequiredFields(Course $teacher, $field)
+    {
+        $response = $this->postJson($this->baseUrl, $teacher->toArray());
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors([$field]);
+    }
+
+    public function testInsertCourseWithRepeatedValue()
+    {
+        $this->postJson($this->baseUrl, $this->course->toArray());
+        $response = $this->postJson($this->baseUrl, $this->course->toArray());
+        $response->assertStatus(422);
+    }
+}
