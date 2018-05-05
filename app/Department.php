@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Faculty;
 
 /**
  * Class Department
@@ -57,6 +58,6 @@ class Department extends Model
      */
     public function faculty()
     {
-        return $this->belongsTo('App\Faculty');
+        return $this->belongsTo(Faculty::class);
     }
 }

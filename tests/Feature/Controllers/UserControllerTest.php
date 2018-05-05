@@ -127,21 +127,6 @@ class UserControllerTest extends TestCase
                 ]),
                 'patronymic',
             ],
-            'no login' => [
-                new User([
-                    'name' => 'asdfasdf',
-                    'surname' => 'asdfasdf',
-                    'patronymic' => 'asdfadf',
-                    'email' => 'asda@example.com',
-                    'date_of_birth' => '1985-04-25',
-                    'mobile_phone' => '123123-24324-234',
-                    'work_phone' => '2342-4234-234',
-                    'gender' => '0',
-                    'is_active' => '1',
-                    'password' => 'asdfasdf',
-                ]),
-                'login',
-            ],
             'no gender' => [
                 new User([
                     'name' => 'asdfasdf',

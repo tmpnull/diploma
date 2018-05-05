@@ -24,6 +24,7 @@ Route::apiResources([
     'groups' => 'API\GroupController',
     'positions' => 'API\PositionController',
     'roles' => 'API\RoleController',
+    'specialities' => 'API\SpecialityController',
     'students' => 'API\StudentController',
     'teachers' => 'API\TeacherController',
     'timetables' => 'API\TimetableController',

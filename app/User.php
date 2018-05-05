@@ -5,6 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Degree;
+use App\Role;
+use App\Position;
 
 /**
  * Class File
@@ -13,7 +16,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  *     type="object",
  *     description="User",
  *     title="User",
- *     required={"name", "email", "login", "surname", "patronymic", "gender"},
+ *     required={"name", "email", "surname", "patronymic", "gender"},
  *     @OAS\Property(
  *         property="name",
  *         description="Name of the file",
@@ -22,11 +25,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  *     @OAS\Property(
  *         property="email",
  *         description="Email of the user",
- *         type="string",
- *     ),
- *     @OAS\Property(
- *         property="login",
- *         description="Login of the user",
  *         type="string",
  *     ),
  *     @OAS\Property(
@@ -94,7 +92,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name', 'surname', 'patronymic', 'date_of_birth', 'email', 'password', 'mobile_phone', 'work_phone', 'gender',
-        'photo', 'login', 'is_active', 'role_id', 'position_id', 'degree_id',
+        'photo', 'is_active', 'role_id', 'position_id', 'degree_id',
     ];
 
     /**
@@ -113,7 +111,7 @@ class User extends Authenticatable
      */
     public function degree()
     {
-        return $this->belongsTo('App\Degree');
+        return $this->belongsTo(Degree::class);
     }
 
     /**
@@ -123,7 +121,7 @@ class User extends Authenticatable
      */
     public function role()
     {
-        return $this->belongsTo('App\Role');
+        return $this->belongsTo(Role::class);
     }
 
     /**
@@ -133,6 +131,6 @@ class User extends Authenticatable
      */
     public function position()
     {
-        return $this->belongsTo('App\Position');
+        return $this->belongsTo(Position::class);
     }
 }

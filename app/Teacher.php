@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\User;
+use App\Department;
 
 /**
  * Class Teacher
@@ -47,7 +49,7 @@ class Teacher extends Model
      */
     public function user()
     {
-        return $this->hasOne('App\User');
+        return $this->hasOne(User::class);
     }
 
     /**
@@ -57,6 +59,6 @@ class Teacher extends Model
      */
     public function department()
     {
-        return $this->belongsTo('App\Department');
+        return $this->belongsTo(Department::class);
     }
 }

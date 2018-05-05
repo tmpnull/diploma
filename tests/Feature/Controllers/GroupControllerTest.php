@@ -3,7 +3,7 @@
 namespace Tests\Feature\Controllers;
 
 use App\Group;
-use App\Department;
+use App\Speciality;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -11,20 +11,20 @@ class GroupControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @var string */
+    /** @var string $baseUrl */
     private $baseUrl = '/api/groups/';
-    /** @var Group */
+    /** @var Group $group */
     private $group;
 
     public function setUp()
     {
         parent::setUp();
-        /** @var Department $faculty */
-        $department= factory(Department::class, 1)->create()->first();
+        /** @var Speciality $faculty */
+        $speciality= factory(Speciality::class, 1)->create()->first();
 
         $this->group = new Group([
             'name' => self::$faker->shuffleString('234фыв'),
-            'department_id' => $department->getAttribute('id'),
+            'speciality_id' => $speciality->getAttribute('id'),
         ]);
         $response = $this->postJson($this->baseUrl, $this->group->toArray());
         $this->group->setAttribute('id', $response->json()['id']);
@@ -71,24 +71,24 @@ class GroupControllerTest extends TestCase
                 new Group([
                     'number' => 3,
                     'abbreviation' => 'asdfasdf',
-                    'department_id' => 1,
+                    'speciality_id' => 1,
                 ])
             ],
             'no abbreviation' => [
                 new Group([
                     'number' => 3,
                     'name' => 'asdfasdf',
-                    'department_id' => 1,
+                    'speciality_id' => 1,
                 ])
             ],
             'no number' => [
                 new Group([
                     'name' => 'asdfasd',
                     'abbreviation' => 'asdfasdf',
-                    'department_id' => 1,
+                    'speciality_id' => 1,
                 ])
             ],
-            'no department_id' => [
+            'no speciality_id' => [
                 new Group([
                     'name' => 'asdfasd',
                     'abbreviation' => 'asdfasdf',
@@ -115,10 +115,10 @@ class GroupControllerTest extends TestCase
         $response->assertStatus(422);
     }
 
-    public function testInsertDepartmentWithWrongForeignKey()
+    public function testInsertGroupWithWrongForeignKey()
     {
         $data = $this->group->toArray();
-        $data['department_id'] = 999999;
+        $data['speciality_id'] = 999999;
         $response = $this->postJson($this->baseUrl, $data);
         $response->assertStatus(422);
     }

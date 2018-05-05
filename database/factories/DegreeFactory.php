@@ -13,13 +13,8 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(App\Department::class, function (Faker $faker) {
-    /** @var \App\Faculty $faculty */
-    $faculty = factory(App\Faculty::class, 1)->create()->first();
+$factory->define(App\Degree::class, function (Faker $faker) {
     return [
         'name' => $faker->unique()->name,
-        'abbreviation' => $faker->unique()->word,
-        'number' => $faker->numberBetween(1, 9999),
-        'faculty_id' => $faculty->getAttribute('id'),
     ];
 });

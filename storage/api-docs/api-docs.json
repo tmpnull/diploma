@@ -1660,6 +1660,169 @@
                 }
             }
         },
+        "/api/specialities": {
+            "get": {
+                "tags": [
+                    "specialities"
+                ],
+                "summary": "list specialities",
+                "operationId": "getSpecialities",
+                "responses": {
+                    "200": {
+                        "description": "A list with specialities",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Speciality"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "specialities"
+                ],
+                "summary": "Add speciality",
+                "operationId": "saveSpeciality",
+                "requestBody": {
+                    "description": "add speciality",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Speciality"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Speciality"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/specialities/{specialityId}": {
+            "get": {
+                "tags": [
+                    "specialities"
+                ],
+                "summary": "Display the specified resource.",
+                "description": ">-\n    For valid response try integer IDs with value >= 1 \\ Other\n    values will generated exceptions",
+                "operationId": "getSpecialityById",
+                "parameters": [
+                    {
+                        "name": "specialityId",
+                        "in": "path",
+                        "description": "ID of speciality that needs to be fetched",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Speciality"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Order not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "specialities"
+                ],
+                "summary": "Update an existing speciality",
+                "operationId": "updateSpeciality",
+                "parameters": [
+                    {
+                        "name": "specialityId",
+                        "in": "path",
+                        "description": "ID of speciality to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "add speciality",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Speciality"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Speciality not found"
+                    },
+                    "405": {
+                        "description": "Validation exception"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "specialities"
+                ],
+                "summary": "Delete speciality by ID",
+                "description": ">-\n    For valid response try integer IDs with positive integer value.\\ \\\n    Negative or non-integer values will generate API errors",
+                "operationId": "deleteSpeciality",
+                "parameters": [
+                    {
+                        "name": "specialityId",
+                        "in": "path",
+                        "description": "ID of the speciality that needs to be deleted",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Order not found"
+                    }
+                }
+            }
+        },
         "/api/students": {
             "get": {
                 "tags": [
@@ -2547,6 +2710,31 @@
                 },
                 "type": "object"
             },
+            "Speciality": {
+                "title": "Speciality",
+                "description": "Speciality",
+                "required": [
+                    "name",
+                    "number",
+                    "abbreviation",
+                    "department"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Name of the speciality",
+                        "type": "string"
+                    },
+                    "number": {
+                        "description": "Number of the speciality",
+                        "type": "integer"
+                    },
+                    "department_id": {
+                        "description": "Department to which this speciality belongs",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
             "Student": {
                 "title": "Student",
                 "description": "Student",
@@ -2626,7 +2814,6 @@
                 "required": [
                     "name",
                     "email",
-                    "login",
                     "surname",
                     "patronymic",
                     "gender"
@@ -2638,10 +2825,6 @@
                     },
                     "email": {
                         "description": "Email of the user",
-                        "type": "string"
-                    },
-                    "login": {
-                        "description": "Login of the user",
                         "type": "string"
                     },
                     "surname": {

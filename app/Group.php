@@ -12,15 +12,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *     type="object",
  *     description="Group",
  *     title="Group",
- *     required={"name", "departmentId"},
+ *     required={"name", "specialityId"},
  *     @OAS\Property(
  *         property="name",
  *         description="Name of the group",
  *         type="string",
  *     ),
  *     @OAS\Property(
- *         property="departmentId",
- *         description="Department to which this group belongs",
+ *         property="specialityId",
+ *         description="Speciality to which this group belongs",
  *         type="integer",
  *     ),
  * )
@@ -37,16 +37,16 @@ class Group extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'department_id',
+        'name', 'speciality_id',
     ];
 
     /**
-     * Get the department record associated with the group.
+     * Get the speciality record associated with the group.
      *
      * Many-To-One realisation.
      */
-    public function department()
+    public function speciality()
     {
-        return $this->belongsTo('App\Department');
+        return $this->belongsTo(Speciality::class);
     }
 }

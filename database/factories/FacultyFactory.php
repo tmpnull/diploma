@@ -15,8 +15,8 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Faculty::class, function (Faker $faker) {
     return [
-        'name' => $faker->word,
-        'abbreviation' => $faker->word(),
-        'number' => $faker->numberBetween(1, 20),
+        'name' => $faker->unique()->name,
+        'abbreviation' => $faker->unique()->word,
+        'number' => $faker->numberBetween(1, 9999),
     ];
 });

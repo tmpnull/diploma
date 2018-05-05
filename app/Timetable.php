@@ -4,6 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Course;
+use App\Group;
+use App\Audience;
 
 /**
  * Class Timetable
@@ -67,7 +70,7 @@ class Timetable extends Model
      */
     public function course()
     {
-        return $this->hasMany('App\Course');
+        return $this->hasMany(Course::class);
     }
 
     /**
@@ -77,7 +80,7 @@ class Timetable extends Model
      */
     public function group()
     {
-        return $this->hasMany('App\Group');
+        return $this->hasMany(Group::class);
     }
 
     /**
@@ -85,8 +88,8 @@ class Timetable extends Model
      *
      * Many-To-Many realisation.
      */
-    public function auditory()
+    public function audience()
     {
-        return $this->hasMany('App\Auditory');
+        return $this->hasMany(Audience::class);
     }
 }

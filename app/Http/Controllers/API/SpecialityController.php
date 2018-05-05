@@ -2,30 +2,30 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Group;
-use App\Http\Resources\Group as GroupResource;
+use App\Speciality;
+use App\Http\Resources\Speciality as SpecialityResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class GroupController extends Controller
+class SpecialityController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @OAS\Get(
-     *   path="/api/groups",
-     *   summary="list groups",
-     *   tags={"groups"},
-     *   operationId="getGroups",
+     *   path="/api/specialities",
+     *   summary="list specialities",
+     *   tags={"specialities"},
+     *   operationId="getSpecialities",
      *   @OAS\Response(
      *     response=200,
-     *     description="A list with groups",
+     *     description="A list with specialities",
      *     @OAS\MediaType(
      *              mediaType="application/json",
      *              @OAS\Schema(
      *                  type="array",
      *                  @OAS\Items(
-     *                      ref="#/components/schemas/Group"
+     *                      ref="#/components/schemas/Speciality"
      *                  ),
      *              ),
      *          ),
@@ -37,33 +37,33 @@ class GroupController extends Controller
      */
     public function index()
     {
-        return response(GroupResource::collection(Group::all()));
+        return response(SpecialityResource::collection(Speciality::all()));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @OAS\Post(
-     *     path="/api/groups",
-     *     tags={"groups"},
-     *     summary="Add group",
-     *     operationId="saveGroup",
+     *     path="/api/specialities",
+     *     tags={"specialities"},
+     *     summary="Add speciality",
+     *     operationId="saveSpeciality",
      *     @OAS\Response(
      *         response=200,
      *         description="successful operation",
      *         @OAS\MediaType(
      *             mediaType="application/json",
      *             @OAS\Schema(
-     *                 ref="#/components/schemas/Group"
+     *                 ref="#/components/schemas/Speciality"
      *             ),
      *         ),
      *     ),
      *     @OAS\RequestBody(
-     *         description="add group",
+     *         description="add speciality",
      *         @OAS\MediaType(
      *             mediaType="application/json",
      *             @OAS\Schema(
-     *                 ref="#/components/schemas/Group"
+     *                 ref="#/components/schemas/Speciality"
      *             ),
      *         ),
      *     ),
@@ -74,32 +74,31 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(
-            [
-                'name' => 'bail|required|unique:groups|max:255',
-                'speciality_id' => 'required|exists:specialities,id',
-            ]
-        );
+        $request->validate([
+            'name' => 'bail|required|unique:specialities|max:255',
+            'number' => 'required|unique:specialities',
+            'department_id' => 'required|exists:departments,id',
+        ]);
 
-        $group = new Group($request->toArray());
-        $group->save();
-        return response(GroupResource::make($group));
+        $speciality = new Speciality($request->toArray());
+        $speciality->save();
+        return response(SpecialityResource::make($speciality));
     }
 
     /**
      * Display the specified resource.
      *
      * @OAS\Get(
-     *     path="/api/groups/{groupId}",
-     *     tags={"groups"},
+     *     path="/api/specialities/{specialityId}",
+     *     tags={"specialities"},
      *     description=">-
     For valid response try integer IDs with value >= 1 \ Other
     values will generated exceptions",
-     *     operationId="getGroupById",
+     *     operationId="getSpecialityById",
      *     @OAS\Parameter(
-     *         name="groupId",
+     *         name="specialityId",
      *         in="path",
-     *         description="ID of group that needs to be fetched",
+     *         description="ID of speciality that needs to be fetched",
      *         required=true,
      *         @OAS\Schema(
      *             type="integer",
@@ -113,7 +112,7 @@ class GroupController extends Controller
      *         @OAS\MediaType(
      *             mediaType="application/json",
      *             @OAS\Schema(
-     *                 ref="#/components/schemas/Group"
+     *                 ref="#/components/schemas/Speciality"
      *             ),
      *         ),
      *     ),
@@ -132,33 +131,33 @@ class GroupController extends Controller
      */
     public function show($id)
     {
-        return response(GroupResource::make(Group::find($id)));
+        return response(SpecialityResource::make(Speciality::find($id)));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @OAS\Put(
-     *     path="/api/groups/{groupId}",
-     *     tags={"groups"},
-     *     summary="Update an existing group",
-     *     operationId="updateGroup",
+     *     path="/api/specialities/{specialityId}",
+     *     tags={"specialities"},
+     *     summary="Update an existing speciality",
+     *     operationId="updateSpeciality",
      *     @OAS\Response(
      *         response=400,
      *         description="Invalid ID supplied"
      *     ),
      *     @OAS\Response(
      *         response=404,
-     *         description="group not found"
+     *         description="Speciality not found"
      *     ),
      *     @OAS\Response(
      *         response=405,
      *         description="Validation exception"
      *     ),
      *     @OAS\Parameter(
-     *         name="groupId",
+     *         name="specialityId",
      *         in="path",
-     *         description="ID of group to update",
+     *         description="ID of speciality to update",
      *         required=true,
      *         @OAS\Schema(
      *             type="integer",
@@ -166,11 +165,11 @@ class GroupController extends Controller
      *         )
      *     ),
      *     @OAS\RequestBody(
-     *         description="add group",
+     *         description="add speciality",
      *         @OAS\MediaType(
      *             mediaType="application/json",
      *             @OAS\Schema(
-     *                 ref="#/components/schemas/Group"
+     *                 ref="#/components/schemas/Speciality"
      *             ),
      *         ),
      *     ),
@@ -182,28 +181,28 @@ class GroupController extends Controller
      */
     public function update(Request $request, $id)
     {
-        /** @var Group $group */
-        $group = Group::find($id);
-        $group->update($request->toArray());
-        return response(GroupResource::make($group));
+        /** @var Speciality $speciality */
+        $speciality = Speciality::find($id);
+        $speciality->update($request->toArray());
+        return response(SpecialityResource::make($speciality));
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @OAS\Delete(
-     *     path="/api/groups/{groupId}",
-     *     tags={"groups"},
-     *     summary="Delete group by ID",
+     *     path="/api/specialities/{specialityId}",
+     *     tags={"specialities"},
+     *     summary="Delete speciality by ID",
      *     description=">-
     For valid response try integer IDs with positive integer value.\ \
     Negative or non-integer values will generate API errors",
-     *     operationId="deleteGroup",
+     *     operationId="deleteSpeciality",
      *     @OAS\Parameter(
-     *         name="groupId",
+     *         name="specialityId",
      *         in="path",
      *         required=true,
-     *         description="ID of the group that needs to be deleted",
+     *         description="ID of the speciality that needs to be deleted",
      *         @OAS\Schema(
      *             type="integer",
      *             format="int64",
@@ -225,6 +224,6 @@ class GroupController extends Controller
      */
     public function destroy($id)
     {
-        return response(Group::destroy($id));
+        return response(Speciality::destroy($id));
     }
 }

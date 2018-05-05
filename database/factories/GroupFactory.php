@@ -4,10 +4,10 @@ use Faker\Generator as Faker;
 
 
 $factory->define(App\Group::class, function (Faker $faker) {
-    /** @var \App\Department $department */
-    $department = factory(App\Department::class, 1)->create()->first();
+    /** @var \App\Speciality $speciality */
+    $speciality = factory(App\Speciality::class, 1)->create()->first();
     return [
-        'name' => $faker->word,
-        'department_id' => $department->getAttribute('id'),
+        'name' => $faker->unique()->word,
+        'speciality_id' => $speciality->getAttribute('id'),
     ];
 });

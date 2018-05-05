@@ -93,7 +93,6 @@ class UserController extends Controller
             'surname' => 'required',
             'patronymic' => 'required',
             'gender' => 'required',
-            'login' => 'required|unique:users|max:255',
         ]);
         return response($this->userService->store($request->toArray()));
     }
