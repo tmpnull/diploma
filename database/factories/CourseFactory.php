@@ -7,7 +7,7 @@ $factory->define(App\Course::class, function (Faker $faker) {
     /** @var \App\Teacher $teacher */
     $teacher = factory(App\Teacher::class, 1)->create()->first();
     return [
-        'name' => $faker->word,
+        'name' => $faker->unique()->word(),
         'teacher_id' => $teacher->getAttribute('id')
     ];
 });
