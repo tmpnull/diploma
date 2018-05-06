@@ -42,6 +42,8 @@ class Faculty extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'number', 'abbreviation',
+        'name',
+        'number',
+        'abbreviation',
     ];
 }

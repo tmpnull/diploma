@@ -5,14 +5,15 @@ namespace Tests\Feature\Controllers;
 use App\File;
 use App\User;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class FileControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /** @var string */
     private $baseUrl = '/api/files/';
+
     /** @var File */
     private $file;
 
@@ -22,7 +23,7 @@ class FileControllerTest extends TestCase
         /** @var User $user */
         $user = factory(User::class, 1)->create()->first();
         $this->file = new File([
-            'name' => self::$faker->word(),
+            'name' => $this->faker->word(),
             'user_id' => $user->getAttribute('id'),
         ]);
         $response = $this->postJson($this->baseUrl, $this->file->toArray());
@@ -42,14 +43,14 @@ class FileControllerTest extends TestCase
 
     public function testListFileById()
     {
-        $uri = $this->baseUrl . $this->file->getAttribute('id');
+        $uri = $this->baseUrl.$this->file->getAttribute('id');
         $response = $this->get($uri);
         $response->assertJsonFragment(['name' => $this->file->getAttribute('name')]);
     }
 
     public function testUpdateFileById()
     {
-        $uri = $this->baseUrl . $this->file->getAttribute('id');
+        $uri = $this->baseUrl.$this->file->getAttribute('id');
         $name = 'Changed name';
         $response = $this->putJson($uri, ['name' => $name]);
         $response->assertJsonFragment(['name' => $name]);
@@ -57,7 +58,7 @@ class FileControllerTest extends TestCase
 
     public function testDeleteFileById()
     {
-        $uri = $this->baseUrl . $this->file->getAttribute('id');
+        $uri = $this->baseUrl.$this->file->getAttribute('id');
         $response = $this->deleteJson($uri);
         $response->assertSuccessful();
         $response->assertSee('1'); // Api should return 1 if entity was successfully deleted
@@ -69,12 +70,12 @@ class FileControllerTest extends TestCase
             'no name' => [
                 new File([
                     'user_id' => 1,
-                ])
+                ]),
             ],
             'no user_id' => [
                 new File([
                     'name' => 'asdasd',
-                ])
+                ]),
             ],
         ];
     }

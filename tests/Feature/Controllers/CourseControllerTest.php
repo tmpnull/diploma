@@ -4,16 +4,16 @@ namespace Tests\Feature\Controllers;
 
 use App\Teacher;
 use App\Course;
-use App\Group;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class CourseControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /** @var string */
     private $baseUrl = '/api/courses/';
+
     /** @var Course */
     private $course;
 
@@ -21,8 +21,12 @@ class CourseControllerTest extends TestCase
     {
         parent::setUp();
 
+        /** @var Teacher $teacher */
+        $teacher = factory(Teacher::class, 1)->create()->first();
+
         $this->course = new Course([
-            'name' => self::$faker->word,
+            'name' => $this->faker->word,
+            'teacher_id' => $teacher->getAttribute('id'),
         ]);
         $response = $this->postJson($this->baseUrl, $this->course->toArray());
         $this->course->setAttribute('id', $response->json()['id']);
@@ -41,14 +45,14 @@ class CourseControllerTest extends TestCase
 
     public function testListCourseById()
     {
-        $uri = $this->baseUrl . $this->course->getAttribute('id');
+        $uri = $this->baseUrl.$this->course->getAttribute('id');
         $response = $this->get($uri);
         $response->assertJsonFragment(['name' => $this->course->getAttribute('name')]);
     }
 
     public function testUpdateCourseById()
     {
-        $uri = $this->baseUrl . $this->course->getAttribute('id');
+        $uri = $this->baseUrl.$this->course->getAttribute('id');
         $name = 'Changed name';
         $response = $this->putJson($uri, ['name' => $name]);
         $response->assertJsonFragment(['name' => $name]);
@@ -56,7 +60,7 @@ class CourseControllerTest extends TestCase
 
     public function testDeleteCourseById()
     {
-        $uri = $this->baseUrl . $this->course->getAttribute('id');
+        $uri = $this->baseUrl.$this->course->getAttribute('id');
         $response = $this->deleteJson($uri);
         $response->assertSuccessful();
         $response->assertSee('1'); // Api should return 1 if entity was successfully deleted
@@ -66,8 +70,16 @@ class CourseControllerTest extends TestCase
     {
         return [
             'no name' => [
-                new Course(),
-                'name'
+                new Course([
+                    'teacher_id' => 1,
+                ]),
+                'name',
+            ],
+            'no teacher_id' => [
+                new Course([
+                    'name' => 'testName',
+                ]),
+                'teacher_id',
             ],
         ];
     }

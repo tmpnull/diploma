@@ -4,14 +4,15 @@ namespace Tests\Feature\Controllers;
 
 use App\Faculty;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class FacultyControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /** @var string */
     private $baseUrl = '/api/faculties/';
+
     /** @var Faculty */
     private $faculty;
 
@@ -19,9 +20,9 @@ class FacultyControllerTest extends TestCase
     {
         parent::setUp();
         $this->faculty = new Faculty([
-            'name' => self::$faker->name(),
-            'abbreviation' => self::$faker->shuffleString('МФРТСЛА'),
-            'number' => self::$faker->numberBetween(1, 5)
+            'name' => $this->faker->name(),
+            'abbreviation' => $this->faker->shuffleString('МФРТСЛА'),
+            'number' => $this->faker->numberBetween(1, 5),
         ]);
         $response = $this->postJson($this->baseUrl, $this->faculty->toArray());
         $this->faculty->setAttribute('id', $response->json()['id']);
@@ -40,14 +41,14 @@ class FacultyControllerTest extends TestCase
 
     public function testListFacultyById()
     {
-        $uri = $this->baseUrl . $this->faculty->getAttribute('id');
+        $uri = $this->baseUrl.$this->faculty->getAttribute('id');
         $response = $this->get($uri);
         $response->assertJsonFragment(['name' => $this->faculty->getAttribute('name')]);
     }
 
     public function testUpdateFacultyById()
     {
-        $uri = $this->baseUrl . $this->faculty->getAttribute('id');
+        $uri = $this->baseUrl.$this->faculty->getAttribute('id');
         $name = 'Changed name';
         $response = $this->putJson($uri, ['name' => $name]);
         $response->assertJsonFragment(['name' => $name]);
@@ -55,7 +56,7 @@ class FacultyControllerTest extends TestCase
 
     public function testDeleteFacultyById()
     {
-        $uri = $this->baseUrl . $this->faculty->getAttribute('id');
+        $uri = $this->baseUrl.$this->faculty->getAttribute('id');
         $response = $this->deleteJson($uri);
         $response->assertSuccessful();
         $response->assertSee('1'); // Api should return 1 if entity was successfully deleted
@@ -68,19 +69,19 @@ class FacultyControllerTest extends TestCase
                 new Faculty([
                     'number' => 3,
                     'abbreviation' => 'asdfasdf',
-                ])
+                ]),
             ],
             'no abbreviation' => [
                 new Faculty([
                     'number' => 3,
                     'name' => 'asdfasdf',
-                ])
+                ]),
             ],
             'no number' => [
                 new Faculty([
                     'name' => 'asdfasd',
                     'abbreviation' => 'asdfasdf',
-                ])
+                ]),
             ],
         ];
     }

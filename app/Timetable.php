@@ -60,7 +60,12 @@ class Timetable extends Model
      * @var array
      */
     protected $fillable = [
-        'course_id', 'day_of_week', 'number', 'is_numerator', 'group_id', 'audience_id'
+        'course_id',
+        'day_of_week',
+        'number',
+        'is_numerator',
+        'group_id',
+        'audience_id',
     ];
 
     /**

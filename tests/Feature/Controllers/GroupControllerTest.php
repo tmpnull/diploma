@@ -5,14 +5,15 @@ namespace Tests\Feature\Controllers;
 use App\Group;
 use App\Speciality;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class GroupControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /** @var string $baseUrl */
     private $baseUrl = '/api/groups/';
+
     /** @var Group $group */
     private $group;
 
@@ -20,10 +21,10 @@ class GroupControllerTest extends TestCase
     {
         parent::setUp();
         /** @var Speciality $faculty */
-        $speciality= factory(Speciality::class, 1)->create()->first();
+        $speciality = factory(Speciality::class, 1)->create()->first();
 
         $this->group = new Group([
-            'name' => self::$faker->shuffleString('234фыв'),
+            'name' => $this->faker->shuffleString('234фыв'),
             'speciality_id' => $speciality->getAttribute('id'),
         ]);
         $response = $this->postJson($this->baseUrl, $this->group->toArray());
@@ -43,14 +44,14 @@ class GroupControllerTest extends TestCase
 
     public function testListGroupById()
     {
-        $uri = $this->baseUrl . $this->group->getAttribute('id');
+        $uri = $this->baseUrl.$this->group->getAttribute('id');
         $response = $this->get($uri);
         $response->assertJsonFragment(['name' => $this->group->getAttribute('name')]);
     }
 
     public function testUpdateGroupById()
     {
-        $uri = $this->baseUrl . $this->group->getAttribute('id');
+        $uri = $this->baseUrl.$this->group->getAttribute('id');
         $name = 'Changed name';
         $response = $this->putJson($uri, ['name' => $name]);
         $response->assertJsonFragment(['name' => $name]);
@@ -58,7 +59,7 @@ class GroupControllerTest extends TestCase
 
     public function testDeleteGroupById()
     {
-        $uri = $this->baseUrl . $this->group->getAttribute('id');
+        $uri = $this->baseUrl.$this->group->getAttribute('id');
         $response = $this->deleteJson($uri);
         $response->assertSuccessful();
         $response->assertSee('1'); // Api should return 1 if entity was successfully deleted
@@ -72,28 +73,28 @@ class GroupControllerTest extends TestCase
                     'number' => 3,
                     'abbreviation' => 'asdfasdf',
                     'speciality_id' => 1,
-                ])
+                ]),
             ],
             'no abbreviation' => [
                 new Group([
                     'number' => 3,
                     'name' => 'asdfasdf',
                     'speciality_id' => 1,
-                ])
+                ]),
             ],
             'no number' => [
                 new Group([
                     'name' => 'asdfasd',
                     'abbreviation' => 'asdfasdf',
                     'speciality_id' => 1,
-                ])
+                ]),
             ],
             'no speciality_id' => [
                 new Group([
                     'name' => 'asdfasd',
                     'abbreviation' => 'asdfasdf',
                     'number' => 1,
-                ])
+                ]),
             ],
         ];
     }

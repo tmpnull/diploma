@@ -17,6 +17,7 @@ Route::apiResources([
     'audiences' => 'API\AudienceController',
     'buildings' => 'API\BuildingController',
     'courses' => 'API\CourseController',
+    'configurations' => 'API\ConfigurationController',
     'degrees' => 'API\DegreeController',
     'departments' => 'API\DepartmentController',
     'faculties' => 'API\FacultyController',

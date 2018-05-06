@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Services\TimetableService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\QueryParameters\TimetableQueryParameters;
 
 class TimetableController extends Controller
 {
@@ -80,20 +81,23 @@ class TimetableController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'course_id' => 'bail|required|exists:courses,id|unique_with:timetables,day_of_week,number,is_numerator,
+        $request->validate(
+            [
+                'course_id' => 'bail|required|exists:courses,id|unique_with:timetables,day_of_week,number,is_numerator,
                 group_id,audience_id',
-            'day_of_week' => 'required',
-            'number' => 'required',
-            'is_numerator' => 'required',
-            'group_id' => 'required|exists:groups,id',
-            'audience_id' => 'required|exists:audiences,id',
-        ]);
+                'day_of_week' => 'required',
+                'number' => 'required',
+                'is_numerator' => 'required',
+                'group_id' => 'required|exists:groups,id',
+                'audience_id' => 'required|exists:audiences,id',
+            ]
+        );
+
         return response($this->timetableService->store($request->toArray()));
     }
 
@@ -138,7 +142,7 @@ class TimetableController extends Controller
      *     ),
      * )
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -157,7 +161,7 @@ class TimetableController extends Controller
     values will generated exceptions",
      *     operationId="getTimetableByGroupId",
      *     @OAS\Parameter(
-     *         name="userId",
+     *         name="groupId",
      *         in="path",
      *         description="ID of group that needs to be fetched",
      *         required=true,
@@ -165,6 +169,30 @@ class TimetableController extends Controller
      *             type="integer",
      *             format="int64",
      *             minimum=1,
+     *         ),
+     *     ),
+     *     @OAS\Parameter(
+     *         name="filterBy",
+     *         in="query",
+     *         description="ID of pet that needs to be fetched",
+     *         @OAS\Schema(
+     *             type="string",
+     *         ),
+     *     ),
+     *     @OAS\Parameter(
+     *         name="filterByPeriod",
+     *         in="query",
+     *         description="Set period of time",
+     *         @OAS\Schema(
+     *             type="string",
+     *         ),
+     *     ),
+     *     @OAS\Parameter(
+     *         name="filterByDate",
+     *         in="query",
+     *         description="Set filter for required date",
+     *         @OAS\Schema(
+     *             type="string",
      *         ),
      *     ),
      *     @OAS\Response(
@@ -187,13 +215,23 @@ class TimetableController extends Controller
      *     ),
      * )
      *
-     * @param  int  $id
+     * @param Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function showByGroupId($id)
+    public function showByGroupId(Request $request, int $id)
     {
-        $a = $this->timetableService->showByGroupId($id);
-        return response($a);
+        $request->validate(
+            [
+                'period' => 'bail|in:day,week',
+                'dividend' => 'in:numerator,denominator',
+                'date' => 'required_with:period|date_format:Y-m-d',
+                'id' => 'exists:groups,id'
+            ]
+        );
+        $queryParams = new TimetableQueryParameters($request);
+
+        return response($this->timetableService->showByGroupId($id, $queryParams));
     }
 
     /**
@@ -237,13 +275,14 @@ class TimetableController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $data = $request->toArray();
+
         return response($this->timetableService->update($id, $data));
     }
 
@@ -279,7 +318,7 @@ class TimetableController extends Controller
      *     )
      * ),
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

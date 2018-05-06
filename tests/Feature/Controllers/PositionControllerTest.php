@@ -4,14 +4,15 @@ namespace Tests\Feature\Controllers;
 
 use App\Position;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class PositionControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /** @var string */
     private $baseUrl = '/api/positions/';
+
     /** @var Position */
     private $position;
 
@@ -19,7 +20,7 @@ class PositionControllerTest extends TestCase
     {
         parent::setUp();
         $this->position = new Position([
-            'name' => self::$faker->jobTitle(),
+            'name' => $this->faker->jobTitle(),
         ]);
         $response = $this->postJson($this->baseUrl, $this->position->toArray());
         $this->position->setAttribute('id', $response->json()['id']);
@@ -38,14 +39,14 @@ class PositionControllerTest extends TestCase
 
     public function testListPositionById()
     {
-        $uri = $this->baseUrl . $this->position->getAttribute('id');
+        $uri = $this->baseUrl.$this->position->getAttribute('id');
         $response = $this->get($uri);
         $response->assertJsonFragment(['name' => $this->position->getAttribute('name')]);
     }
 
     public function testUpdatePositionById()
     {
-        $uri = $this->baseUrl . $this->position->getAttribute('id');
+        $uri = $this->baseUrl.$this->position->getAttribute('id');
         $name = 'Changed name';
         $response = $this->putJson($uri, ['name' => $name]);
         $response->assertJsonFragment(['name' => $name]);
@@ -53,7 +54,7 @@ class PositionControllerTest extends TestCase
 
     public function testDeletePositionById()
     {
-        $uri = $this->baseUrl . $this->position->getAttribute('id');
+        $uri = $this->baseUrl.$this->position->getAttribute('id');
         $response = $this->deleteJson($uri);
         $response->assertSuccessful();
         $response->assertSee('1'); // Api should return 1 if entity was successfully deleted
@@ -63,7 +64,7 @@ class PositionControllerTest extends TestCase
     {
         return [
             'no name' => [
-                new Position()
+                new Position(),
             ],
         ];
     }

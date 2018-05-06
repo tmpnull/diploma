@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             AudiencesTableSeeder::class,
             BuildingsTableSeeder::class,
             CoursesTableSeeder::class,
+            ConfigurationsTableSeeder::class,
             DegreesTableSeeder::class,
             DepartmentsTableSeeder::class,
             FacultiesTableSeeder::class,

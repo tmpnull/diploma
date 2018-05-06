@@ -18,6 +18,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *         description="Name of the course",
  *         type="string",
  *     ),
+ *     @OAS\Property(
+ *         property="teacherId",
+ *         description="Id of the teacher",
+ *         type="integer",
+ *     ),
  * )
  *
  * @package App
@@ -32,6 +37,16 @@ class Course extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
+        'name', 'teacher_id'
     ];
+
+    /**
+     * Get the faculty record associated with the department.
+     *
+     * Many-To-One realisation.
+     */
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class);
+    }
 }

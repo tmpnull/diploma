@@ -39,7 +39,8 @@ class Student extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'group_id'
+        'user_id',
+        'group_id',
     ];
 
     /**

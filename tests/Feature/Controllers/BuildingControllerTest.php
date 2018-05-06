@@ -3,16 +3,16 @@
 namespace Tests\Feature\Controllers;
 
 use App\Building;
-use App\Faculty;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class BuildingControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /** @var string */
     private $baseUrl = '/api/buildings/';
+
     /** @var Building */
     private $building;
 
@@ -20,8 +20,8 @@ class BuildingControllerTest extends TestCase
     {
         parent::setUp();
         $this->building = new Building([
-            'name' => self::$faker->name(),
-            'abbreviation' => self::$faker->shuffleString('МФРТСЛА'),
+            'name' => $this->faker->name(),
+            'abbreviation' => $this->faker->shuffleString('МФРТСЛА'),
         ]);
         $response = $this->postJson($this->baseUrl, $this->building->toArray());
         $this->building->setAttribute('id', $response->json()['id']);
@@ -38,17 +38,16 @@ class BuildingControllerTest extends TestCase
         $response->assertJsonFragment(['name' => $this->building->getAttribute('name')]);
     }
 
-
     public function testListBuildingById()
     {
-        $uri = $this->baseUrl . $this->building->getAttribute('id');
+        $uri = $this->baseUrl.$this->building->getAttribute('id');
         $response = $this->get($uri);
         $response->assertJsonFragment(['name' => $this->building->getAttribute('name')]);
     }
 
     public function testUpdateBuildingById()
     {
-        $uri = $this->baseUrl . $this->building->getAttribute('id');
+        $uri = $this->baseUrl.$this->building->getAttribute('id');
         $name = 'Changed name';
         $response = $this->putJson($uri, ['name' => $name]);
         $response->assertJsonFragment(['name' => $name]);
@@ -56,7 +55,7 @@ class BuildingControllerTest extends TestCase
 
     public function testDeleteBuildingById()
     {
-        $uri = $this->baseUrl . $this->building->getAttribute('id');
+        $uri = $this->baseUrl.$this->building->getAttribute('id');
         $response = $this->deleteJson($uri);
         $response->assertSuccessful();
         $response->assertSee('1'); // Api should return 1 if entity was successfully deleted
@@ -68,12 +67,12 @@ class BuildingControllerTest extends TestCase
             'no name' => [
                 new Building([
                     'abbreviation' => 'asdfasdf',
-                ])
+                ]),
             ],
             'no abbreviation' => [
                 new Building([
                     'name' => 'asdfasdf',
-                ])
+                ]),
             ],
         ];
     }

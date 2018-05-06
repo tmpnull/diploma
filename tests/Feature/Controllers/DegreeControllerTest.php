@@ -4,14 +4,15 @@ namespace Tests\Feature\Controllers;
 
 use App\Degree;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class DegreeControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /** @var string */
     private $baseUrl = '/api/degrees/';
+
     /** @var Degree */
     private $degree;
 
@@ -19,7 +20,7 @@ class DegreeControllerTest extends TestCase
     {
         parent::setUp();
         $this->degree = new Degree([
-            'name' => self::$faker->jobTitle(),
+            'name' => $this->faker->jobTitle(),
         ]);
         $response = $this->postJson($this->baseUrl, $this->degree->toArray());
         $this->degree->setAttribute('id', $response->json()['id']);
@@ -38,14 +39,14 @@ class DegreeControllerTest extends TestCase
 
     public function testListDegreeById()
     {
-        $uri = $this->baseUrl . $this->degree->getAttribute('id');
+        $uri = $this->baseUrl.$this->degree->getAttribute('id');
         $response = $this->get($uri);
         $response->assertJsonFragment(['name' => $this->degree->getAttribute('name')]);
     }
 
     public function testUpdateDegreeById()
     {
-        $uri = $this->baseUrl . $this->degree->getAttribute('id');
+        $uri = $this->baseUrl.$this->degree->getAttribute('id');
         $name = 'Changed name';
         $response = $this->putJson($uri, ['name' => $name]);
         $response->assertJsonFragment(['name' => $name]);
@@ -53,7 +54,7 @@ class DegreeControllerTest extends TestCase
 
     public function testDeleteDegreeById()
     {
-        $uri = $this->baseUrl . $this->degree->getAttribute('id');
+        $uri = $this->baseUrl.$this->degree->getAttribute('id');
         $response = $this->deleteJson($uri);
         $response->assertSuccessful();
         $response->assertSee('1'); // Api should return 1 if entity was successfully deleted
@@ -63,7 +64,7 @@ class DegreeControllerTest extends TestCase
     {
         return [
             'no name' => [
-                new Degree()
+                new Degree(),
             ],
         ];
     }

@@ -37,7 +37,8 @@ class Group extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'speciality_id',
+        'name',
+        'speciality_id',
     ];
 
     /**

@@ -38,10 +38,10 @@ class File extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'user_id', 'path',
+        'name',
+        'user_id',
+        'path',
     ];
-
-
 
     /**
      * Get the user record associated with the department.
@@ -59,6 +59,6 @@ class File extends Model
      * @var array
      */
     protected $hidden = [
-        'path'
+        'path',
     ];
 }

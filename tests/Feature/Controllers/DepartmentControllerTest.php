@@ -5,14 +5,15 @@ namespace Tests\Feature\Controllers;
 use App\Department;
 use App\Faculty;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class DepartmentControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /** @var string */
     private $baseUrl = '/api/departments/';
+
     /** @var Department */
     private $department;
 
@@ -23,9 +24,9 @@ class DepartmentControllerTest extends TestCase
         $faculty = factory(Faculty::class, 1)->create()->first();
 
         $this->department = new Department([
-            'name' => self::$faker->name(),
-            'abbreviation' => self::$faker->shuffleString('МФРТСЛА'),
-            'number' => self::$faker->numberBetween(1, 5),
+            'name' => $this->faker->name(),
+            'abbreviation' => $this->faker->shuffleString('МФРТСЛА'),
+            'number' => $this->faker->numberBetween(1, 5),
             'faculty_id' => $faculty->getAttribute('id'),
         ]);
         $response = $this->postJson($this->baseUrl, $this->department->toArray());
@@ -45,14 +46,14 @@ class DepartmentControllerTest extends TestCase
 
     public function testListDepartmentById()
     {
-        $uri = $this->baseUrl . $this->department->getAttribute('id');
+        $uri = $this->baseUrl.$this->department->getAttribute('id');
         $response = $this->get($uri);
         $response->assertJsonFragment(['name' => $this->department->getAttribute('name')]);
     }
 
     public function testUpdateDepartmentById()
     {
-        $uri = $this->baseUrl . $this->department->getAttribute('id');
+        $uri = $this->baseUrl.$this->department->getAttribute('id');
         $name = 'Changed name';
         $response = $this->putJson($uri, ['name' => $name]);
         $response->assertJsonFragment(['name' => $name]);
@@ -60,7 +61,7 @@ class DepartmentControllerTest extends TestCase
 
     public function testDeleteDepartmentById()
     {
-        $uri = $this->baseUrl . $this->department->getAttribute('id');
+        $uri = $this->baseUrl.$this->department->getAttribute('id');
         $response = $this->deleteJson($uri);
         $response->assertSuccessful();
         $response->assertSee('1'); // Api should return 1 if entity was successfully deleted
@@ -74,28 +75,28 @@ class DepartmentControllerTest extends TestCase
                     'number' => 3,
                     'abbreviation' => 'asdfasdf',
                     'faculty_id' => 1,
-                ])
+                ]),
             ],
             'no abbreviation' => [
                 new Department([
                     'number' => 3,
                     'name' => 'asdfasdf',
                     'faculty_id' => 1,
-                ])
+                ]),
             ],
             'no number' => [
                 new Department([
                     'name' => 'asdfasd',
                     'abbreviation' => 'asdfasdf',
                     'faculty_id' => 1,
-                ])
+                ]),
             ],
             'no faculty_id' => [
                 new Department([
                     'name' => 'asdfasd',
                     'abbreviation' => 'asdfasdf',
                     'number' => 1,
-                ])
+                ]),
             ],
         ];
     }

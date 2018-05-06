@@ -38,7 +38,8 @@ class Audience extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'building_id'
+        'name',
+        'building_id',
     ];
 
     /**

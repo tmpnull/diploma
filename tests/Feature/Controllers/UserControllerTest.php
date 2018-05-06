@@ -6,11 +6,11 @@ use App\Position;
 use App\Role;
 use App\User;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class UserControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /** @var string */
     private $baseUrl = '/api/users/';
@@ -25,19 +25,19 @@ class UserControllerTest extends TestCase
         $role = factory(Role::class, 1)->create()->first();
 
         $this->user = new User([
-            'name' => self::$faker->firstName(),
-            'login' => self::$faker->firstName(),
-            'surname' => self::$faker->lastName(),
-            'patronymic' => self::$faker->firstName(),
-            'date_of_birth' => self::$faker->date(),
-            'email' => self::$faker->email(),
-            'mobile_phone' => self::$faker->phoneNumber(),
-            'work_phone' => self::$faker->phoneNumber(),
-            'gender' => self::$faker->boolean(),
+            'name' => $this->faker->firstName(),
+            'login' => $this->faker->firstName(),
+            'surname' => $this->faker->lastName(),
+            'patronymic' => $this->faker->firstName(),
+            'date_of_birth' => $this->faker->date(),
+            'email' => $this->faker->email(),
+            'mobile_phone' => $this->faker->phoneNumber(),
+            'work_phone' => $this->faker->phoneNumber(),
+            'gender' => $this->faker->boolean(),
             'position_id' => $position->getAttribute('id'),
             'role_id' => $role->getAttribute('id'),
             'is_active' => true,
-            'password' => self::$faker->password(),
+            'password' => $this->faker->password(),
         ]);
         $data = $this->user->toArray();
         $data['password'] = $this->user->getAttribute('password');

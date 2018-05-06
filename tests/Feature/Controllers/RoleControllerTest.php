@@ -4,14 +4,15 @@ namespace Tests\Feature\Controllers;
 
 use App\Role;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class RoleControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /** @var string */
     private $baseUrl = '/api/roles/';
+
     /** @var Role */
     private $role;
 
@@ -19,7 +20,7 @@ class RoleControllerTest extends TestCase
     {
         parent::setUp();
         $this->role = new Role([
-            'name' => self::$faker->jobTitle(),
+            'name' => $this->faker->jobTitle(),
         ]);
         $response = $this->postJson($this->baseUrl, $this->role->toArray());
         $this->role->setAttribute('id', $response->json()['id']);
@@ -38,14 +39,14 @@ class RoleControllerTest extends TestCase
 
     public function testListRoleById()
     {
-        $uri = $this->baseUrl . $this->role->getAttribute('id');
+        $uri = $this->baseUrl.$this->role->getAttribute('id');
         $response = $this->get($uri);
         $response->assertJsonFragment(['name' => $this->role->getAttribute('name')]);
     }
 
     public function testUpdateRoleById()
     {
-        $uri = $this->baseUrl . $this->role->getAttribute('id');
+        $uri = $this->baseUrl.$this->role->getAttribute('id');
         $name = 'Changed name';
         $response = $this->putJson($uri, ['name' => $name]);
         $response->assertJsonFragment(['name' => $name]);
@@ -53,7 +54,7 @@ class RoleControllerTest extends TestCase
 
     public function testDeleteRoleById()
     {
-        $uri = $this->baseUrl . $this->role->getAttribute('id');
+        $uri = $this->baseUrl.$this->role->getAttribute('id');
         $response = $this->deleteJson($uri);
         $response->assertSuccessful();
         $response->assertSee('1'); // Api should return 1 if entity was successfully deleted
@@ -63,7 +64,7 @@ class RoleControllerTest extends TestCase
     {
         return [
             'no name' => [
-                new Role()
+                new Role(),
             ],
         ];
     }

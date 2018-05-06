@@ -4,30 +4,31 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\User;
 
 /**
- * Class Building
+ * Class Configuration
  *
  * @OAS\Schema(
  *     type="object",
- *     description="Building",
- *     title="Building",
- *     required={"name", "abbreviation"},
+ *     description="Configuration",
+ *     title="Configuration",
+ *     required={"key"},
  *     @OAS\Property(
- *         property="name",
- *         description="Name of the building",
+ *         property="key",
+ *         description="Key of the parameter",
  *         type="string",
  *     ),
  *     @OAS\Property(
- *         property="abbreviation",
- *         description="Abbreviation of the building",
+ *         property="value",
+ *         description="Value for the key",
  *         type="string",
  *     ),
  * )
  *
  * @package App
  */
-class Building extends Model
+class Configuration extends Model
 {
     use SoftDeletes;
 
@@ -37,7 +38,7 @@ class Building extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
-        'abbreviation',
+        'key',
+        'value',
     ];
 }

@@ -2328,7 +2328,7 @@
                 "operationId": "getTimetableByGroupId",
                 "parameters": [
                     {
-                        "name": "userId",
+                        "name": "groupId",
                         "in": "path",
                         "description": "ID of group that needs to be fetched",
                         "required": true,
@@ -2336,6 +2336,22 @@
                             "type": "integer",
                             "format": "int64",
                             "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "filterBy",
+                        "in": "query",
+                        "description": "ID of pet that needs to be fetched",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "ID of pet that needs to be fetched",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
@@ -2668,15 +2684,15 @@
                 "description": "Group",
                 "required": [
                     "name",
-                    "departmentId"
+                    "specialityId"
                 ],
                 "properties": {
                     "name": {
                         "description": "Name of the group",
                         "type": "string"
                     },
-                    "departmentId": {
-                        "description": "Department to which this group belongs",
+                    "specialityId": {
+                        "description": "Speciality to which this group belongs",
                         "type": "integer"
                     }
                 },

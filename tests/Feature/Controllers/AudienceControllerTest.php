@@ -4,15 +4,16 @@ namespace Tests\Feature\Controllers;
 
 use App\Audience;
 use App\Building;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AudienceControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /** @var string */
     private $baseUrl = '/api/audiences/';
+
     /** @var Audience */
     private $audience;
 
@@ -23,9 +24,9 @@ class AudienceControllerTest extends TestCase
         $building = factory(Building::class, 1)->create()->first();
 
         $this->audience = new Audience([
-            'name' => self::$faker->name(),
-            'abbreviation' => self::$faker->shuffleString('МФРТСЛА'),
-            'number' => self::$faker->numberBetween(1, 5),
+            'name' => $this->faker->name(),
+            'abbreviation' => $this->faker->shuffleString('МФРТСЛА'),
+            'number' => $this->faker->numberBetween(1, 5),
             'building_id' => $building->getAttribute('id'),
         ]);
         $response = $this->postJson($this->baseUrl, $this->audience->toArray());
@@ -45,14 +46,14 @@ class AudienceControllerTest extends TestCase
 
     public function testListAudienceById()
     {
-        $uri = $this->baseUrl . $this->audience->getAttribute('id');
+        $uri = $this->baseUrl.$this->audience->getAttribute('id');
         $response = $this->get($uri);
         $response->assertJsonFragment(['name' => $this->audience->getAttribute('name')]);
     }
 
     public function testUpdateAudienceById()
     {
-        $uri = $this->baseUrl . $this->audience->getAttribute('id');
+        $uri = $this->baseUrl.$this->audience->getAttribute('id');
         $name = 'Changed name';
         $response = $this->putJson($uri, ['name' => $name]);
         $response->assertJsonFragment(['name' => $name]);
@@ -60,7 +61,7 @@ class AudienceControllerTest extends TestCase
 
     public function testDeleteAudienceById()
     {
-        $uri = $this->baseUrl . $this->audience->getAttribute('id');
+        $uri = $this->baseUrl.$this->audience->getAttribute('id');
         $response = $this->deleteJson($uri);
         $response->assertSuccessful();
         $response->assertSee('1'); // Api should return 1 if entity was successfully deleted
@@ -72,12 +73,12 @@ class AudienceControllerTest extends TestCase
             'no name' => [
                 new Audience([
                     'building_id' => 1,
-                ])
+                ]),
             ],
             'no building_id' => [
                 new Audience([
                     'name' => 'asdfasd',
-                ])
+                ]),
             ],
         ];
     }
