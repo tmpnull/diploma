@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Services\TimetableService;
+use Exception;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\QueryParameters\TimetableQueryParameters;
+use Illuminate\Support\Facades\Validator;
 
 class TimetableController extends Controller
 {
@@ -172,7 +174,7 @@ class TimetableController extends Controller
      *         ),
      *     ),
      *     @OAS\Parameter(
-     *         name="filterBy",
+     *         name="period",
      *         in="query",
      *         description="ID of pet that needs to be fetched",
      *         @OAS\Schema(
@@ -180,7 +182,7 @@ class TimetableController extends Controller
      *         ),
      *     ),
      *     @OAS\Parameter(
-     *         name="filterByPeriod",
+     *         name="dividend",
      *         in="query",
      *         description="Set period of time",
      *         @OAS\Schema(
@@ -188,7 +190,15 @@ class TimetableController extends Controller
      *         ),
      *     ),
      *     @OAS\Parameter(
-     *         name="filterByDate",
+     *         name="day",
+     *         in="query",
+     *         description="Set filter for required date",
+     *         @OAS\Schema(
+     *             type="integer",
+     *         ),
+     *     ),
+     *     @OAS\Parameter(
+     *         name="date",
      *         in="query",
      *         description="Set filter for required date",
      *         @OAS\Schema(
@@ -221,17 +231,113 @@ class TimetableController extends Controller
      */
     public function showByGroupId(Request $request, int $id)
     {
-        $request->validate(
-            [
-                'period' => 'bail|in:day,week',
-                'dividend' => 'in:numerator,denominator',
-                'date' => 'required_with:period|date_format:Y-m-d',
-                'id' => 'exists:groups,id'
-            ]
-        );
+        $validator = Validator::make($request->all(), [
+            'period' => 'in:day,week',
+            'dividend' => 'in:numerator,denominator,auto',
+            'date' => 'required_if:dividend,auto|date_format:Y-m-d',
+            'day' => 'required_if:period,day|`integer|min:1|max:5',
+            'id' => 'exists:groups,id'
+        ]);
+        if ($validator->fails()) {
+            return response($validator->errors()->all(), 403);
+        }
         $queryParams = new TimetableQueryParameters($request);
 
         return response($this->timetableService->showByGroupId($id, $queryParams));
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @OAS\Get(
+     *     path="/api/timetables/teacher/{teacherId}",
+     *     tags={"timetables"},
+     *     description=">-
+    For valid response try integer IDs with value >= 1 \ Other
+    values will generated exceptions",
+     *     operationId="getTimetableByTeacherId",
+     *     @OAS\Parameter(
+     *         name="teacherId",
+     *         in="path",
+     *         description="ID of teacher that needs to be fetched",
+     *         required=true,
+     *         @OAS\Schema(
+     *             type="integer",
+     *             format="int64",
+     *             minimum=1,
+     *         ),
+     *     ),
+     *     @OAS\Parameter(
+     *         name="period",
+     *         in="query",
+     *         description="ID of pet that needs to be fetched",
+     *         @OAS\Schema(
+     *             type="string",
+     *         ),
+     *     ),
+     *     @OAS\Parameter(
+     *         name="dividend",
+     *         in="query",
+     *         description="Set period of time",
+     *         @OAS\Schema(
+     *             type="string",
+     *         ),
+     *     ),
+     *     @OAS\Parameter(
+     *         name="day",
+     *         in="query",
+     *         description="Set filter for required date",
+     *         @OAS\Schema(
+     *             type="integer",
+     *         ),
+     *     ),
+     *     @OAS\Parameter(
+     *         name="date",
+     *         in="query",
+     *         description="Set filter for required date",
+     *         @OAS\Schema(
+     *             type="string",
+     *         ),
+     *     ),
+     *     @OAS\Response(
+     *         response=200,
+     *         description="successful operation",
+     *         @OAS\MediaType(
+     *             mediaType="application/json",
+     *             @OAS\Schema(
+     *                 ref="#/components/schemas/Timetable"
+     *             ),
+     *         ),
+     *     ),
+     *     @OAS\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OAS\Response(
+     *         response=404,
+     *         description="Order not found"
+     *     ),
+     * )
+     *
+     * @param Request $request
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showByTeacherId(Request $request, int $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'period' => 'in:day,week',
+            'dividend' => 'in:numerator,denominator,auto',
+            'date' => 'required_if:dividend,auto|date_format:Y-m-d',
+            'day' => 'required_if:period,day|`integer|min:1|max:5',
+            'id' => 'exists:groups,id'
+        ]);
+        if ($validator->fails()) {
+            return response($validator->errors()->all(), 403);
+        }
+        $queryParams = new TimetableQueryParameters($request);
+
+        return response($this->timetableService->showByTeacherId($id, $queryParams));
     }
 
     /**

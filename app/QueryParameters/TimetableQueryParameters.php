@@ -8,11 +8,11 @@ use Illuminate\Http\Request;
 
 class TimetableQueryParameters
 {
-    /** @var string $filterByPeriod */
-    private $filterByPeriod;
+    /** @var string $period */
+    private $period;
 
-    /** @var string $filterByDate */
-    private $filterByDate;
+    /** @var string $dividend */
+    private $dividend;
 
     /** @var string $sortBy */
     private $sortBy;
@@ -20,32 +20,26 @@ class TimetableQueryParameters
     /** @var Carbon $date */
     private $date;
 
+    /** @var int $day */
+    private $day;
+
+    public static $DIVIDEND_NUMERATOR = 'numerator';
+    public static $DIVIDEND_DENOMINATOR = 'denominator';
+    public static $DIVIDEND_AUTO = 'auto';
+    public static $PERIOD_DAY = 'day';
+    public static $PERIOD_WEEK = 'week';
+
 
     public function __construct(Request $request = null)
     {
         if (!$request) {
             return;
         }
-        $this->filterByPeriod = $request->get('period') ?: 'week';
-        $this->filterByDate = $request->get('dividend') ?: null;
+        $this->period = $request->get('period') ?: null;
+        $this->dividend = $request->get('dividend') ?: null;
         $this->sortBy = $request->get('sortBy') ?: null;
-        $this->date = new Carbon($request->get('date'));
-    }
-
-    /**
-     * @return string | null
-     */
-    public function getFilterBy(): ?string
-    {
-        return $this->filterByPeriod;
-    }
-
-    /**
-     * @param string $filterBy
-     */
-    public function setFilterBy(string $filterBy): void
-    {
-        $this->filterByPeriod = $filterBy;
+        $this->day = $request->get('day') ?: null;
+        $this->date = $request->get('date') ? new Carbon($request->get('date')) : null;
     }
 
     /**
@@ -67,7 +61,7 @@ class TimetableQueryParameters
     /**
      * @return Carbon
      */
-    public function getDate(): Carbon
+    public function getDate(): ?Carbon
     {
         return $this->date;
     }
@@ -83,16 +77,48 @@ class TimetableQueryParameters
     /**
      * @return string
      */
-    public function getFilterByDate(): ?string
+    public function getPeriod(): ?string
     {
-        return $this->filterByDate;
+        return $this->period;
     }
 
     /**
-     * @param string $filterByDate
+     * @param string $period
      */
-    public function setFilterByDate(string $filterByDate): void
+    public function setPeriod(string $period): void
     {
-        $this->filterByDate = $filterByDate;
+        $this->period = $period;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDividend(): ?string
+    {
+        return $this->dividend;
+    }
+
+    /**
+     * @param string $dividend
+     */
+    public function setDividend(string $dividend): void
+    {
+        $this->dividend = $dividend;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDay(): ?int
+    {
+        return $this->day;
+    }
+
+    /**
+     * @param int $day
+     */
+    public function setDay(int $day): void
+    {
+        $this->day = $day;
     }
 }

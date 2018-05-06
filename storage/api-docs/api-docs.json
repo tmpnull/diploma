@@ -338,6 +338,172 @@
                 }
             }
         },
+        "/api/configurations": {
+            "get": {
+                "tags": [
+                    "configurations"
+                ],
+                "summary": "list configurations",
+                "operationId": "getFaculties",
+                "responses": {
+                    "200": {
+                        "description": "A list with configurations",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Configuration"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "configurations"
+                ],
+                "summary": "Add configuration",
+                "operationId": "saveConfiguration",
+                "requestBody": {
+                    "description": "add configuration",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Configuration"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Configuration"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "wrong data passed"
+                    }
+                }
+            }
+        },
+        "/api/configurations/{configurationId}": {
+            "get": {
+                "tags": [
+                    "configurations"
+                ],
+                "summary": "Display the specified resource.",
+                "description": ">-\n    For valid response try integer IDs with value >= 1 \\ Other\n    values will generated exceptions",
+                "operationId": "getConfigurationById",
+                "parameters": [
+                    {
+                        "name": "configurationId",
+                        "in": "path",
+                        "description": "ID of configuration that needs to be fetched",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Configuration"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Order not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "configurations"
+                ],
+                "summary": "Update an existing configuration",
+                "operationId": "updateConfiguration",
+                "parameters": [
+                    {
+                        "name": "configurationId",
+                        "in": "path",
+                        "description": "ID of configuration to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "add configuration",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Configuration"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Configuration not found"
+                    },
+                    "405": {
+                        "description": "Validation exception"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "configurations"
+                ],
+                "summary": "Delete configuration by ID",
+                "description": ">-\n    For valid response try integer IDs with positive integer value.\\ \\\n    Negative or non-integer values will generate API errors",
+                "operationId": "deleteConfiguration",
+                "parameters": [
+                    {
+                        "name": "configurationId",
+                        "in": "path",
+                        "description": "ID of the configuration that needs to be deleted",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Order not found"
+                    }
+                }
+            }
+        },
         "/api/courses": {
             "get": {
                 "tags": [
@@ -2339,7 +2505,7 @@
                         }
                     },
                     {
-                        "name": "filterBy",
+                        "name": "period",
                         "in": "query",
                         "description": "ID of pet that needs to be fetched",
                         "schema": {
@@ -2347,9 +2513,98 @@
                         }
                     },
                     {
+                        "name": "dividend",
+                        "in": "query",
+                        "description": "Set period of time",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "day",
+                        "in": "query",
+                        "description": "Set filter for required date",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
                         "name": "date",
                         "in": "query",
+                        "description": "Set filter for required date",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Timetable"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Order not found"
+                    }
+                }
+            }
+        },
+        "/api/timetables/teacher/{teacherId}": {
+            "get": {
+                "tags": [
+                    "timetables"
+                ],
+                "summary": "Display the specified resource.",
+                "description": ">-\n    For valid response try integer IDs with value >= 1 \\ Other\n    values will generated exceptions",
+                "operationId": "getTimetableByTeacherId",
+                "parameters": [
+                    {
+                        "name": "teacherId",
+                        "in": "path",
+                        "description": "ID of teacher that needs to be fetched",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "period",
+                        "in": "query",
                         "description": "ID of pet that needs to be fetched",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "dividend",
+                        "in": "query",
+                        "description": "Set period of time",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "day",
+                        "in": "query",
+                        "description": "Set filter for required date",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "description": "Set filter for required date",
                         "schema": {
                             "type": "string"
                         }
@@ -2579,6 +2834,24 @@
                 },
                 "type": "object"
             },
+            "Configuration": {
+                "title": "Configuration",
+                "description": "Configuration",
+                "required": [
+                    "key"
+                ],
+                "properties": {
+                    "key": {
+                        "description": "Key of the parameter",
+                        "type": "string"
+                    },
+                    "value": {
+                        "description": "Value for the key",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "Course": {
                 "title": "Course",
                 "description": "Course",
@@ -2589,6 +2862,10 @@
                     "name": {
                         "description": "Name of the course",
                         "type": "string"
+                    },
+                    "teacherId": {
+                        "description": "Id of the teacher",
+                        "type": "integer"
                     }
                 },
                 "type": "object"

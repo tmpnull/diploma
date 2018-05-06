@@ -17,6 +17,6 @@ $factory->define(App\Faculty::class, function (Faker $faker) {
     return [
         'name' => $faker->unique()->name,
         'abbreviation' => $faker->unique()->word,
-        'number' => $faker->numberBetween(1, 9999),
+        'number' => $faker->unique()->numberBetween(1, 9999),
     ];
 });

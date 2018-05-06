@@ -33,3 +33,4 @@ Route::apiResources([
 ]);
 
 Route::get('timetables/group/{id}', 'API\TimetableController@showByGroupId')->name('showTimetableByGroupId');
+Route::get('timetables/teacher/{id}', 'API\TimetableController@showByTeacherId')->name('showTimetableByTeacherId');

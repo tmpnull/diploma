@@ -24,9 +24,7 @@ class CreateTimetablesTable extends Migration
             $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade');
             $table->unsignedInteger('audience_id')->nullable();
             $table->foreign('audience_id')->references('id')->on('audiences')->onDelete('cascade');
-            $table->unique(['day_of_week', 'number']);
-            $table->unique(['is_numerator', 'course_id']);
-            $table->unique(['group_id', 'audience_id']);
+            $table->unique(['day_of_week', 'number', 'is_numerator', 'course_id']);
             $table->timestamps();
             $table->softDeletes();
         });
