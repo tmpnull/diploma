@@ -20,7 +20,7 @@ use App\Building;
  *         type="string",
  *     ),
  *     @OAS\Property(
- *         property="buildingId",
+ *         property="building_id",
  *         description="Building to which this audience belongs",
  *         type="integer",
  *     ),

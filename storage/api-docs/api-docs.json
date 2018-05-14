@@ -2808,7 +2808,7 @@
                         "description": "Name of the audience",
                         "type": "string"
                     },
-                    "buildingId": {
+                    "building_id": {
                         "description": "Building to which this audience belongs",
                         "type": "integer"
                     }

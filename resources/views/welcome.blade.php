@@ -84,7 +84,7 @@
 
                 <div class="links">
                     <a href="/api">{{ __('routes.documentation') }}</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                    <a href="https://github.com/kornevdima/diploma">GitHub</a>
                 </div>
             </div>
         </div>
