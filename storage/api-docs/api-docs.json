@@ -2505,19 +2505,29 @@
                         }
                     },
                     {
-                        "name": "period",
-                        "in": "query",
-                        "description": "ID of pet that needs to be fetched",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
                         "name": "dividend",
                         "in": "query",
                         "description": "Set period of time",
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "enum": [
+                                "numerator",
+                                "denominator",
+                                "auto"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "semester",
+                        "in": "query",
+                        "description": "Set semester",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "first",
+                                "second",
+                                "auto"
+                            ]
                         }
                     },
                     {
@@ -2525,15 +2535,22 @@
                         "in": "query",
                         "description": "Set filter for required date",
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "enum": [
+                                1,
+                                2,
+                                3,
+                                4,
+                                5
+                            ]
                         }
                     },
                     {
                         "name": "date",
                         "in": "query",
-                        "description": "Set filter for required date",
+                        "description": "Set filter for required date YYYY-MM-DD",
                         "schema": {
-                            "type": "string"
+                            "type": "date"
                         }
                     }
                 ],
@@ -2578,19 +2595,29 @@
                         }
                     },
                     {
-                        "name": "period",
-                        "in": "query",
-                        "description": "ID of pet that needs to be fetched",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
                         "name": "dividend",
                         "in": "query",
                         "description": "Set period of time",
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "enum": [
+                                "numerator",
+                                "denominator",
+                                "auto"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "semester",
+                        "in": "query",
+                        "description": "Set semester",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "first",
+                                "second",
+                                "auto"
+                            ]
                         }
                     },
                     {
@@ -2598,15 +2625,22 @@
                         "in": "query",
                         "description": "Set filter for required date",
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "enum": [
+                                1,
+                                2,
+                                3,
+                                4,
+                                5
+                            ]
                         }
                     },
                     {
                         "name": "date",
                         "in": "query",
-                        "description": "Set filter for required date",
+                        "description": "Set filter for required date YYYY-MM-DD",
                         "schema": {
-                            "type": "string"
+                            "type": "date"
                         }
                     }
                 ],
@@ -3088,6 +3122,10 @@
                     },
                     "is_numerator": {
                         "description": "Is course only on numerator week",
+                        "type": "boolean"
+                    },
+                    "is_first_semester": {
+                        "description": "Is course only on first semester",
                         "type": "boolean"
                     },
                     "group_id": {

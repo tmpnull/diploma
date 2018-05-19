@@ -15,6 +15,6 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Degree::class, function (Faker $faker) {
     return [
-        'name' => $faker->unique()->name,
+        'name' => $faker->unique()->name . $faker->randomNumber(3),
     ];
 });

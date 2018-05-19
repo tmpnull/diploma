@@ -2,44 +2,39 @@
 
 namespace App\QueryParameters;
 
-
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TimetableQueryParameters
 {
     /** @var string $period */
-    private $period;
-
+    private $semester;
     /** @var string $dividend */
     private $dividend;
-
     /** @var string $sortBy */
     private $sortBy;
-
     /** @var Carbon $date */
     private $date;
-
     /** @var int $day */
     private $day;
 
     public static $DIVIDEND_NUMERATOR = 'numerator';
     public static $DIVIDEND_DENOMINATOR = 'denominator';
     public static $DIVIDEND_AUTO = 'auto';
-    public static $PERIOD_DAY = 'day';
-    public static $PERIOD_WEEK = 'week';
-
+    public static $SEMESTER_FIRST = 'first';
+    public static $SEMESTER_SECOND = 'second';
+    public static $SEMESTER_AUTO = 'auto';
 
     public function __construct(Request $request = null)
     {
-        if (!$request) {
+        if (! $request) {
             return;
         }
-        $this->period = $request->get('period') ?: null;
         $this->dividend = $request->get('dividend') ?: null;
         $this->sortBy = $request->get('sortBy') ?: null;
         $this->day = $request->get('day') ?: null;
         $this->date = $request->get('date') ? new Carbon($request->get('date')) : null;
+        $this->semester = $request->get('semester') ?: null;
     }
 
     /**
@@ -77,22 +72,6 @@ class TimetableQueryParameters
     /**
      * @return string
      */
-    public function getPeriod(): ?string
-    {
-        return $this->period;
-    }
-
-    /**
-     * @param string $period
-     */
-    public function setPeriod(string $period): void
-    {
-        $this->period = $period;
-    }
-
-    /**
-     * @return string
-     */
     public function getDividend(): ?string
     {
         return $this->dividend;
@@ -120,5 +99,18 @@ class TimetableQueryParameters
     public function setDay(int $day): void
     {
         $this->day = $day;
+    }
+
+    /**
+     * @param string $semester
+     */
+    public function setSemester(string $semester): void
+    {
+        $this->semester = $semester;
+    }
+
+    public function getSemester(): ?string
+    {
+        return $this->semester;
     }
 }

@@ -15,7 +15,7 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Configuration::class, function (Faker $faker) {
     return [
-        'key' => $faker->unique()->name,
+        'key' => $faker->unique()->name . $faker->randomNumber(3),
         'value' => $faker->word,
     ];
 });

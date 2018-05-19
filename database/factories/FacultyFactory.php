@@ -15,8 +15,8 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Faculty::class, function (Faker $faker) {
     return [
-        'name' => $faker->unique()->name,
-        'abbreviation' => $faker->unique()->word,
-        'number' => $faker->unique()->numberBetween(1, 9999),
+        'name' => $faker->unique()->name . $faker->randomNumber(3),
+        'abbreviation' => $faker->unique()->word . $faker->randomNumber(3),
+        'number' => $faker->unique()->randomNumber(4) + time(),
     ];
 });

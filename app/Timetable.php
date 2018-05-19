@@ -36,6 +36,11 @@ use App\Audience;
  *         description="Is course only on numerator week",
  *         type="boolean",
  *     ),
+ *      @OAS\Property(
+ *         property="is_first_semester",
+ *         description="Is course only on first semester",
+ *         type="boolean",
+ *     ),
  *     @OAS\Property(
  *         property="group_id",
  *         description="Id of the group",
@@ -64,6 +69,7 @@ class Timetable extends Model
         'day_of_week',
         'number',
         'is_numerator',
+        'is_first_semester',
         'group_id',
         'audience_id',
     ];

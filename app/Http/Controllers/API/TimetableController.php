@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\QueryParameters\TimetableQueryParameters;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
 class TimetableController extends Controller
@@ -47,9 +48,9 @@ class TimetableController extends Controller
      *   ),
      * )
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function index()
+    public function index(): Response
     {
         return response($this->timetableService->index());
     }
@@ -83,10 +84,10 @@ class TimetableController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param  Request $request
+     * @return Response
      */
-    public function store(Request $request)
+    public function store(Request $request): Response
     {
         $request->validate(
             [
@@ -95,6 +96,7 @@ class TimetableController extends Controller
                 'day_of_week' => 'required',
                 'number' => 'required',
                 'is_numerator' => 'required',
+                'is_first_semester' => 'required',
                 'group_id' => 'required|exists:groups,id',
                 'audience_id' => 'required|exists:audiences,id',
             ]
@@ -145,9 +147,9 @@ class TimetableController extends Controller
      * )
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function show($id)
+    public function show($id): Response
     {
         return response($this->timetableService->show($id));
     }
@@ -174,19 +176,21 @@ class TimetableController extends Controller
      *         ),
      *     ),
      *     @OAS\Parameter(
-     *         name="period",
-     *         in="query",
-     *         description="ID of pet that needs to be fetched",
-     *         @OAS\Schema(
-     *             type="string",
-     *         ),
-     *     ),
-     *     @OAS\Parameter(
      *         name="dividend",
      *         in="query",
      *         description="Set period of time",
      *         @OAS\Schema(
      *             type="string",
+     *             enum={"numerator","denominator","auto"}
+     *         ),
+     *     ),
+     *     @OAS\Parameter(
+     *         name="semester",
+     *         in="query",
+     *         description="Set semester",
+     *         @OAS\Schema(
+     *             type="string",
+     *             enum={"first","second","auto"}
      *         ),
      *     ),
      *     @OAS\Parameter(
@@ -195,14 +199,15 @@ class TimetableController extends Controller
      *         description="Set filter for required date",
      *         @OAS\Schema(
      *             type="integer",
+     *             enum={1,2,3,4,5}
      *         ),
      *     ),
      *     @OAS\Parameter(
      *         name="date",
      *         in="query",
-     *         description="Set filter for required date",
+     *         description="Set filter for required date YYYY-MM-DD",
      *         @OAS\Schema(
-     *             type="string",
+     *             type="date",
      *         ),
      *     ),
      *     @OAS\Response(
@@ -227,15 +232,15 @@ class TimetableController extends Controller
      *
      * @param Request $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function showByGroupId(Request $request, int $id)
+    public function showByGroupId(Request $request, int $id): Response
     {
         $validator = Validator::make($request->all(), [
-            'period' => 'in:day,week',
             'dividend' => 'in:numerator,denominator,auto',
-            'date' => 'required_if:dividend,auto|date_format:Y-m-d',
-            'day' => 'required_if:period,day|`integer|min:1|max:5',
+            'semester' => 'in:first,second,auto',
+            'date' => 'bail|date_format:Y-m-d|required_if:semester,auto|required_if:date,auto',
+            'day' => 'integer|min:1|max:5',
             'id' => 'exists:groups,id'
         ]);
         if ($validator->fails()) {
@@ -268,19 +273,21 @@ class TimetableController extends Controller
      *         ),
      *     ),
      *     @OAS\Parameter(
-     *         name="period",
-     *         in="query",
-     *         description="ID of pet that needs to be fetched",
-     *         @OAS\Schema(
-     *             type="string",
-     *         ),
-     *     ),
-     *     @OAS\Parameter(
      *         name="dividend",
      *         in="query",
      *         description="Set period of time",
      *         @OAS\Schema(
      *             type="string",
+     *             enum={"numerator","denominator","auto"}
+     *         ),
+     *     ),
+     *     @OAS\Parameter(
+     *         name="semester",
+     *         in="query",
+     *         description="Set semester",
+     *         @OAS\Schema(
+     *             type="string",
+     *             enum={"first","second","auto"}
      *         ),
      *     ),
      *     @OAS\Parameter(
@@ -289,14 +296,15 @@ class TimetableController extends Controller
      *         description="Set filter for required date",
      *         @OAS\Schema(
      *             type="integer",
+     *             enum={1,2,3,4,5}
      *         ),
      *     ),
      *     @OAS\Parameter(
      *         name="date",
      *         in="query",
-     *         description="Set filter for required date",
+     *         description="Set filter for required date YYYY-MM-DD",
      *         @OAS\Schema(
-     *             type="string",
+     *             type="date",
      *         ),
      *     ),
      *     @OAS\Response(
@@ -321,16 +329,15 @@ class TimetableController extends Controller
      *
      * @param Request $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function showByTeacherId(Request $request, int $id)
+    public function showByTeacherId(Request $request, int $id): Response
     {
         $validator = Validator::make($request->all(), [
-            'period' => 'in:day,week',
-            'dividend' => 'in:numerator,denominator,auto',
+            'dividend' => 'bail|in:numerator,denominator,auto',
             'date' => 'required_if:dividend,auto|date_format:Y-m-d',
-            'day' => 'required_if:period,day|`integer|min:1|max:5',
-            'id' => 'exists:groups,id'
+            'day' => 'day|integer|min:1|max:5',
+            'id' => 'exists:teachers,id'
         ]);
         if ($validator->fails()) {
             return response($validator->errors()->all(), 403);
@@ -381,11 +388,11 @@ class TimetableController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  Request $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): Response
     {
         $data = $request->toArray();
 
@@ -425,7 +432,7 @@ class TimetableController extends Controller
      * ),
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {

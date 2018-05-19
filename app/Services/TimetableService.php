@@ -7,6 +7,7 @@ use App\Course;
 use App\Timetable;
 use App\Http\Resources\Timetable as TimetableResource;
 use App\QueryParameters\TimetableQueryParameters;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Carbon\Carbon;
 
@@ -37,31 +38,15 @@ class TimetableService
     public function showByGroupId(int $id, TimetableQueryParameters $queryParameters): TimetableResource
     {
         $timetables = Timetable::where('group_id', $id)->get();
+        $datesOfStartSemesters = $this->getDatesOfStartSemesters();
 
-        if ($queryParameters->getDividend()) {
-            if ($queryParameters->getDividend() === TimetableQueryParameters::$DIVIDEND_AUTO) {
-                $startOfSemester = new Carbon(
-                    Configuration::where('key', 'start_of_semester')->first()->getAttribute('value')
-                );
-                $weekOfSemesterStart = $startOfSemester->weekOfYear;
-                $weekNumber = $queryParameters->getDate()->weekOfYear;
-                $dividend = $this->isNumerator($weekOfSemesterStart, $weekNumber)
-                    ? TimetableQueryParameters::$DIVIDEND_NUMERATOR
-                    : TimetableQueryParameters::$DIVIDEND_DENOMINATOR;
-
-                $timetables = $this->filterByDividend($timetables, $dividend);
-            } else {
-                $timetables = $this->filterByDividend($timetables, $queryParameters->getDividend());
-            }
+        if ($datesOfStartSemesters->count() < 2) {
+            abort(403, 'One of start semester date is not present');
         }
 
-        if ($queryParameters->getPeriod() === TimetableQueryParameters::$PERIOD_DAY) {
-            if ($queryParameters->getDividend() === TimetableQueryParameters::$DIVIDEND_AUTO) {
-                $timetables = $this->filterByDay($timetables, $queryParameters->getDate()->dayOfWeek);
-            } else {
-                $timetables = $this->filterByDay($timetables, $queryParameters->getDay());
-            }
-        }
+        $timetables = $this->filterBySemester($timetables, $queryParameters, $datesOfStartSemesters);
+        $timetables = $this->filterByDividend($timetables, $queryParameters, $datesOfStartSemesters);
+        $timetables = $this->filterByDay($timetables, $queryParameters);
 
         return TimetableResource::make($timetables);
     }
@@ -75,31 +60,15 @@ class TimetableService
     {
         $courses = Course::where('teacher_id', $id)->get();
         $timetables = Timetable::whereIn('course_id', $courses)->get();
+        $datesOfStartSemesters = $this->getDatesOfStartSemesters();
 
-        if ($queryParameters->getDividend()) {
-            if ($queryParameters->getDividend() === TimetableQueryParameters::$DIVIDEND_AUTO) {
-                $startOfSemester = new Carbon(
-                    Configuration::where('key', 'start_of_semester')->first()->getAttribute('value')
-                );
-                $weekOfSemesterStart = $startOfSemester->weekOfYear;
-                $weekNumber = $queryParameters->getDate()->weekOfYear;
-                $dividend = $this->isNumerator($weekOfSemesterStart, $weekNumber)
-                    ? TimetableQueryParameters::$DIVIDEND_NUMERATOR
-                    : TimetableQueryParameters::$DIVIDEND_DENOMINATOR;
-
-                $timetables = $this->filterByDividend($timetables, $dividend);
-            } else {
-                $timetables = $this->filterByDividend($timetables, $queryParameters->getDividend());
-            }
+        if ($datesOfStartSemesters->count() < 2) {
+            abort(403, 'One of start semester date is not present');
         }
 
-        if ($queryParameters->getPeriod() === TimetableQueryParameters::$PERIOD_DAY) {
-            if ($queryParameters->getDividend() === TimetableQueryParameters::$DIVIDEND_AUTO) {
-                $timetables = $this->filterByDay($timetables, $queryParameters->getDate()->dayOfWeek);
-            } else {
-                $timetables = $this->filterByDay($timetables, $queryParameters->getDay());
-            }
-        }
+        $timetables = $this->filterBySemester($timetables, $queryParameters, $datesOfStartSemesters);
+        $timetables = $this->filterByDividend($timetables, $queryParameters, $datesOfStartSemesters);
+        $timetables = $this->filterByDay($timetables, $queryParameters);
 
         return TimetableResource::make($timetables);
     }
@@ -140,6 +109,89 @@ class TimetableService
     }
 
     /**
+     * @param \Illuminate\Database\Eloquent\Collection $collection
+     * @param TimetableQueryParameters $queryParameters
+     * @param \Illuminate\Support\Collection $datesOfStartSemesters
+     * @return mixed
+     */
+    private function filterBySemester($collection, $queryParameters, $datesOfStartSemesters)
+    {
+        if ($queryParameters->getSemester()) {
+            $semester = $queryParameters->getSemester();
+            if ($semester === TimetableQueryParameters::$SEMESTER_AUTO) {
+                if ($queryParameters->getDate()) {
+                    $semester = $queryParameters->getDate()->between(
+                        $datesOfStartSemesters->get(0),
+                        $datesOfStartSemesters->get(1)
+                    ) ? 'first' : 'second';
+                } else {
+                    return $collection;
+                }
+            }
+
+            $requested = $semester === TimetableQueryParameters::$SEMESTER_FIRST;
+
+            $collection = $collection->filter(function (Timetable $timetable) use ($requested) {
+                return (bool) $timetable->getAttribute('is_first_semester') === $requested;
+            });
+        }
+
+        return $collection;
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Collection $collection
+     * @param TimetableQueryParameters $queryParameters
+     * @param \Illuminate\Support\Collection $datesOfStartSemesters
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    private function filterByDividend($collection, $queryParameters, $datesOfStartSemesters): Collection
+    {
+        if ($queryParameters->getDividend()) {
+            $dividend = $queryParameters->getDividend();
+            if ($dividend === TimetableQueryParameters::$DIVIDEND_AUTO) {
+                $date = $queryParameters->getDate();
+                if ($date) {
+                    $date->between(
+                        $datesOfStartSemesters->get(0),
+                        $datesOfStartSemesters->get(1)
+                    ) ? $weekOfSemesterStart = $datesOfStartSemesters->get(0)->weekOfYear
+                        : $weekOfSemesterStart = $datesOfStartSemesters->get(1)->weekOfYear;
+                    $weekNumber = $date->weekOfYear;
+                    $dividend = $this->isNumerator($weekOfSemesterStart, $weekNumber)
+                        ? TimetableQueryParameters::$DIVIDEND_NUMERATOR
+                        : TimetableQueryParameters::$DIVIDEND_DENOMINATOR;
+                }
+            }
+
+            $requested = $dividend === TimetableQueryParameters::$DIVIDEND_NUMERATOR;
+
+            $collection = $collection->filter(function (Timetable $timetable) use ($requested) {
+                return (bool) $timetable->getAttribute('is_numerator') === $requested;
+            });
+        }
+
+        return $collection;
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Collection $collection
+     * @param TimetableQueryParameters $queryParameters
+     * @return mixed
+     */
+    private function filterByDay($collection, $queryParameters)
+    {
+        $day = $queryParameters->getDay();
+        if ($day) {
+            $collection = $collection->filter(function (Timetable $value, $key) use ($day) {
+                return $value->getAttribute('day_of_week') === $day;
+            });
+        }
+
+        return $collection;
+    }
+
+    /**
      * This function provide us to determine if requested timetable is enum in current semester
      *
      * @param int $startOfSemester
@@ -154,23 +206,19 @@ class TimetableService
         return $isFirstWeekEven === $isSecondWeekEven;
     }
 
-    private function filterByDividend($collection, $dividend)
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    private function getDatesOfStartSemesters(): \Illuminate\Support\Collection
     {
-        $requested = $dividend === TimetableQueryParameters::$DIVIDEND_NUMERATOR;
+        /** @var \Illuminate\Database\Eloquent\Collection $datesOfStartSemesters */
+        $datesOfStartSemesters = Configuration::whereIn('key', [
+            'start_of_first_semester',
+            'start_of_second_semester',
+        ])->get()->map(function ($item) {
+            return new Carbon($item->getAttribute('value'));
+        });
 
-        $collection = $collection->filter(function (Timetable $value, $key) use ($requested) {
-            return (bool) $value->getAttribute('is_numerator') === $requested;
-        })->values();
-
-        return $collection;
-    }
-
-    private function filterByDay($collection, $day)
-    {
-        $collection = $collection->filter(function (Timetable $value, $key) use ($day) {
-            return $value->getAttribute('day_of_week') === $day;
-        })->values();
-
-        return $collection;
+        return $datesOfStartSemesters;
     }
 }
