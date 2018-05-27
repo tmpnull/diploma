@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             TeachersTableSeeder::class,
             TimetablesTableSeeder::class,
             UsersTableSeeder::class,
+            InitialSeeder::class,
         ]);
     }
 }

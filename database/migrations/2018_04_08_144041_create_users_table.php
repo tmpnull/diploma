@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('patronymic');
             $table->string('email')->unique();
             $table->string('password');
-            $table->date('date_of_birth');
+            $table->date('date_of_birth')->nullable();
             $table->string('mobile_phone')->nullable();
             $table->string('work_phone')->nullable();
             $table->string('photo')->nullable();
@@ -30,8 +30,7 @@ class CreateUsersTable extends Migration
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->unsignedInteger('position_id')->nullable();
             $table->foreign('position_id')->references('id')->on('positions')->onDelete('cascade');
-            $table->boolean('gender');
-            $table->boolean('is_active');
+            $table->boolean('gender')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

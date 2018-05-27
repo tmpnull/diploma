@@ -88,11 +88,10 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'bail|required|unique:users|max:255',
+            'name' => 'bail|required|max:255',
             'email' => 'required|unique:users|max:255',
             'surname' => 'required',
             'patronymic' => 'required',
-            'gender' => 'required',
         ]);
         return response($this->userService->store($request->toArray()));
     }

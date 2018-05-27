@@ -30,7 +30,9 @@ class UserService
      */
     public function store(array $data)
     {
+        /** @var User $user */
         $user = new User($data);
+        $user->setAttribute('password', bcrypt($user->getAttribute('password')));
         $user->save();
         return UserResource::make($user);
     }

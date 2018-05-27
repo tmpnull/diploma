@@ -184,6 +184,9 @@ class AudienceController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'name' => 'required|unique:audiences,name|max:255'
+        ]);
         /** @var Audience $audience */
         $audience = Audience::find($id);
         $audience->update($request->toArray());

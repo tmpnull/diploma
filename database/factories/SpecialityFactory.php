@@ -18,7 +18,7 @@ $factory->define(App\Speciality::class, function (Faker $faker) {
     $department = factory(App\Department::class, 1)->create()->first();
     return [
         'name' => $faker->unique()->word . $faker->randomNumber(3),
-        'number' => $faker->randomNumber(4) + time(),
+        'number' => $faker->randomNumber(4) + $faker->randomNumber(4),
         'department_id' => $department->getAttribute('id'),
     ];
 });

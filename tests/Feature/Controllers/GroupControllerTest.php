@@ -20,7 +20,7 @@ class GroupControllerTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        /** @var Speciality $faculty */
+        /** @var Speciality $speciality */
         $speciality = factory(Speciality::class, 1)->create()->first();
 
         $this->group = new Group([
@@ -71,20 +71,6 @@ class GroupControllerTest extends TestCase
             'no name' => [
                 new Group([
                     'number' => 3,
-                    'abbreviation' => 'asdfasdf',
-                    'speciality_id' => 1,
-                ]),
-            ],
-            'no abbreviation' => [
-                new Group([
-                    'number' => 3,
-                    'name' => 'asdfasdf',
-                    'speciality_id' => 1,
-                ]),
-            ],
-            'no number' => [
-                new Group([
-                    'name' => 'asdfasd',
                     'abbreviation' => 'asdfasdf',
                     'speciality_id' => 1,
                 ]),

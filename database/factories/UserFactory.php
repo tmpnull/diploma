@@ -18,13 +18,11 @@ $factory->define(App\User::class, function (Faker $faker) {
         'name' => $faker->firstName,
         'email' => $faker->unique()->safeEmail,
         'password' => bcrypt($faker->password), // secret
-        'remember_token' => $faker->word,
         'surname' => $faker->lastName,
         'patronymic' => $faker->firstName,
         'date_of_birth' => $faker->date(),
         'mobile_phone' => $faker->phoneNumber,
         'work_phone' => $faker->phoneNumber,
         'gender' => $faker->boolean,
-        'is_active' => true,
     ];
 });

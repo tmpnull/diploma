@@ -36,7 +36,6 @@ class UserControllerTest extends TestCase
             'gender' => $this->faker->boolean(),
             'position_id' => $position->getAttribute('id'),
             'role_id' => $role->getAttribute('id'),
-            'is_active' => true,
             'password' => $this->faker->password(),
         ]);
         $data = $this->user->toArray();
@@ -91,7 +90,6 @@ class UserControllerTest extends TestCase
                     'mobile_phone' => '123123-24324-234',
                     'work_phone' => '2342-4234-234',
                     'gender' => '0',
-                    'is_active' => '1',
                     'password' => 'asdfasdf',
                     'login' => 'asda',
                 ]),
@@ -106,7 +104,6 @@ class UserControllerTest extends TestCase
                     'mobile_phone' => '123123-24324-234',
                     'work_phone' => '2342-4234-234',
                     'gender' => '0',
-                    'is_active' => '1',
                     'password' => 'asdfasdf',
                     'login' => 'asda',
                 ]),
@@ -121,26 +118,10 @@ class UserControllerTest extends TestCase
                     'mobile_phone' => '123123-24324-234',
                     'work_phone' => '2342-4234-234',
                     'gender' => '0',
-                    'is_active' => '1',
                     'password' => 'asdfasdf',
                     'login' => 'asda',
                 ]),
                 'patronymic',
-            ],
-            'no gender' => [
-                new User([
-                    'name' => 'asdfasdf',
-                    'email' => 'asda@example.com',
-                    'surname' => 'asdfadf',
-                    'patronymic' => 'asdfadf',
-                    'date_of_birth' => '1985-04-25',
-                    'mobile_phone' => '123123-24324-234',
-                    'work_phone' => '2342-4234-234',
-                    'is_active' => '1',
-                    'password' => 'asdfasdf',
-                    'login' => 'asda',
-                ]),
-                'gender',
             ],
         ];
     }
@@ -166,7 +147,7 @@ class UserControllerTest extends TestCase
     public function testInsertUserWithWrongForeignKey()
     {
         $data = $this->user->toArray();
-        $data['building_id'] = 999999;
+        $data['role_id'] = 999999;
         $response = $this->postJson($this->baseUrl, $data);
         $response->assertStatus(422);
     }

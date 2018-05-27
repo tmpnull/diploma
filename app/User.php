@@ -41,6 +41,7 @@ use App\Position;
  *         property="date_of_birth",
  *         description="Date of birth of the user",
  *         type="string",
+ *         format="date",
  *     ),
  *     @OAS\Property(
  *         property="password",
@@ -101,7 +102,6 @@ class User extends Authenticatable
         'work_phone',
         'gender',
         'photo',
-        'is_active',
         'role_id',
         'position_id',
         'degree_id',
