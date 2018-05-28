@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Log;
 
 class AudienceController extends Controller
 {
+
+    public function __construct()
+    {
+        //$this->middleware('auth:api');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -32,6 +38,13 @@ class AudienceController extends Controller
      *          ),
      *     ),
      *   ),
+     *  @OAS\SecurityScheme(
+     *          securityScheme="Bearer",
+     *          type="http",
+     *          in="header",
+     *          name="Authorization",
+     *          scheme="bearer",
+     *      )
      * )
      *
      * @param Request $request

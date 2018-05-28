@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Degree;
 use App\Role;
 use App\Position;
+use Laravel\Passport\HasApiTokens;
 
 /**
  * Class File
@@ -84,7 +85,7 @@ use App\Position;
  */
 class User extends Authenticatable
 {
-    use Notifiable, SoftDeletes;
+    use HasApiTokens, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

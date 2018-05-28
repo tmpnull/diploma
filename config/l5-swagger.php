@@ -130,22 +130,24 @@ return [
         ],
         */
 
-        /* Open API 3.0 support
+        /* Open API 3.0 support */
         'passport' => [ // Unique name of security
             'type' => 'oauth2', // The type of the security scheme. Valid values are "basic", "apiKey" or "oauth2".
             'description' => 'Laravel passport oauth2 security.',
             'in' => 'header',
-            'scheme' => 'https',
+            'scheme' => 'http',
             'flows' => [
                 "password" => [
-                    "authorizationUrl" => config('app.url') . '/oauth/authorize',
-                    "tokenUrl" => config('app.url') . '/oauth/token',
-                    "refreshUrl" => config('app.url') . '/token/refresh',
+                    //"authorizationUrl" => config('app.url') . '/oauth/authorize',
+                    "authorizationUrl" => 'http://homestead.test/oauth/authorize',
+                    //"tokenUrl" => config('app.url') . '/oauth/token',
+                    "tokenUrl" => 'http://homestead.test/oauth/token',
+                    //"refreshUrl" => config('app.url') . '/token/refresh',
+                    "refreshUrl" => 'http://homestead.test/token/refresh',
                     "scopes" => []
                 ],
             ],
         ],
-        */
     ],
 
     /*

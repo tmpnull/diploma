@@ -14,5 +14,7 @@ return [
 
     'home' => 'Home',
     'documentation' => 'API Documentation',
+    'login' => 'Login',
+    'register' => 'Register',
 
 ];

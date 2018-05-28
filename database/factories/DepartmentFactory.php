@@ -19,7 +19,7 @@ $factory->define(App\Department::class, function (Faker $faker) {
     return [
         'name' => $faker->unique()->name . $faker->randomNumber(3),
         'abbreviation' => $faker->unique()->word . $faker->randomNumber(3),
-        'number' => $faker->randomNumber(4) + $faker->randomNumber(4),
+        'number' => $faker->unique()->randomNumber(4) + $faker->unique()->randomNumber(4),
         'faculty_id' => $faculty->getAttribute('id'),
     ];
 });

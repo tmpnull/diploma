@@ -14,5 +14,7 @@ return [
 
     'home' => 'Главная',
     'documentation' => 'Документация API',
+    'login' => 'Войти',
+    'register' => 'Зарегистрироваться',
 
 ];
