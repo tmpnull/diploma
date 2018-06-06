@@ -1,16 +1,21 @@
 # diploma
-RESTful application for manage schedule hosted by Laravel
+## RESTful application for manage schedule hosted by Laravel
 
-To deploy this application you need to follow next steps:
-1) Install homestead by Laravel https://laravel.com/docs/5.6/homestead
-2) Create "code" folder inside homestead dir
-3) Clone this repo into code folder
-4) Connect to Vagrant box by calling vagrant ssh in homestead dir
-5) Change dir to code
-6) Run composer install
-7) Run yarn install
-8) Run artisan migrate:fresh --seed to create tables and seed them
+**To deploy this application you need to follow next steps:**
+1. Install [Homestead by Laravel](https://laravel.com/docs/5.6/homestead)
+   
+   **If you want to run PHP Unit tests, you need to add following changes in *Homestead.yaml*:**
+   1. Add "*homestead_test*" to databases list right after the "*homestead*"
+   2. After step 11, ```run migrate:fresh --seed -env="testing"``` to create testing environment
 
-If you want to run PHP Unit tests, you need to add some changes in Homestead.yaml
-1) Add homestead_test database
-2) After step 8, run migrate:fresh --seed -env="testing" to migrate testing environment
+2. Create "*code*" folder inside application base dir
+3. Clone this repo into the "*code*" folder
+4. Rename *.env.example* to *.env*
+5. Run Vagrant box in homestead dir by calling ```vagrant up```
+6. Connect to Vagrant box by calling ```vagrant ssh``` 
+7. Go to *code* directory
+8. Run ```composer install``` to install all php dependencies
+9. Run ```yarn install``` to install all JS dependencies for authorization
+10. By default *APP_KEY* is not present in *.env*, so you need to run 
+```artisan key:generate```
+11. Run ```artisan migrate:fresh --seed``` to create tables and seed them
