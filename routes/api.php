@@ -13,24 +13,26 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::apiResources([
-    'audiences' => 'API\AudienceController',
-    'buildings' => 'API\BuildingController',
-    'courses' => 'API\CourseController',
-    'configurations' => 'API\ConfigurationController',
-    'degrees' => 'API\DegreeController',
-    'departments' => 'API\DepartmentController',
-    'faculties' => 'API\FacultyController',
-    'files' => 'API\FileController',
-    'groups' => 'API\GroupController',
-    'positions' => 'API\PositionController',
-    'roles' => 'API\RoleController',
-    'specialities' => 'API\SpecialityController',
-    'students' => 'API\StudentController',
-    'teachers' => 'API\TeacherController',
-    'timetables' => 'API\TimetableController',
-    'users' => 'API\UserController',
-]);
+Route::group(['middleware' => ['auth:api']], function () {
+    Route::apiResources([
+        'audiences' => 'API\AudienceController',
+        'buildings' => 'API\BuildingController',
+        'courses' => 'API\CourseController',
+        'configurations' => 'API\ConfigurationController',
+        'degrees' => 'API\DegreeController',
+        'departments' => 'API\DepartmentController',
+        'faculties' => 'API\FacultyController',
+        'files' => 'API\FileController',
+        'groups' => 'API\GroupController',
+        'positions' => 'API\PositionController',
+        'roles' => 'API\RoleController',
+        'specialities' => 'API\SpecialityController',
+        'students' => 'API\StudentController',
+        'teachers' => 'API\TeacherController',
+        'timetables' => 'API\TimetableController',
+        'users' => 'API\UserController',
+    ]);
+});
 
 Route::get('timetables/group/{id}', 'API\TimetableController@showByGroupId')->name('showTimetableByGroupId');
 Route::get('timetables/teacher/{id}', 'API\TimetableController@showByTeacherId')->name('showTimetableByTeacherId');
