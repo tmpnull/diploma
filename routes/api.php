@@ -36,8 +36,3 @@ Route::group(['middleware' => ['auth:api']], function () {
 
 Route::get('timetables/group/{id}', 'API\TimetableController@showByGroupId')->name('showTimetableByGroupId');
 Route::get('timetables/teacher/{id}', 'API\TimetableController@showByTeacherId')->name('showTimetableByTeacherId');
-
-
-Route::middleware('auth:api')->get('/users', function (Request $request) {
-    return $request->user();
-});

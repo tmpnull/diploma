@@ -5,10 +5,13 @@ namespace Tests\Unit\Controllers;
 
 use App\Services\TimetableService;
 use Carbon\Carbon;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class TimetableControllerTest extends TestCase
 {
+    use DatabaseTransactions;
+
     public function checkNumeratorDataProvider()
     {
         return [

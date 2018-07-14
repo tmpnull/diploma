@@ -17,7 +17,7 @@ class SpecialityControllerTest extends TestCase
     /** @var Speciality $speciality */
     private $speciality;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         /** @var Department $department */

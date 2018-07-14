@@ -22,7 +22,7 @@ class TimetableControllerTest extends TestCase
     /** @var Group */
     private $group;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         /** @var Group $group */

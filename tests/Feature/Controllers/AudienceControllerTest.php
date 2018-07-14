@@ -17,7 +17,7 @@ class AudienceControllerTest extends TestCase
     /** @var Audience */
     private $audience;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         /** @var Building $building */

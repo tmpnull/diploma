@@ -16,7 +16,7 @@ class DegreeControllerTest extends TestCase
     /** @var Degree */
     private $degree;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $this->degree = new Degree([

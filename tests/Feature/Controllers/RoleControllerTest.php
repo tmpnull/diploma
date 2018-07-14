@@ -16,7 +16,7 @@ class RoleControllerTest extends TestCase
     /** @var Role */
     private $role;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $this->role = new Role([

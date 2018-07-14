@@ -17,7 +17,7 @@ class UserControllerTest extends TestCase
     /** @var User */
     private $user;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
@@ -26,7 +26,6 @@ class UserControllerTest extends TestCase
 
         $this->user = new User([
             'name' => $this->faker->firstName(),
-            'login' => $this->faker->firstName(),
             'surname' => $this->faker->lastName(),
             'patronymic' => $this->faker->firstName(),
             'date_of_birth' => $this->faker->date(),

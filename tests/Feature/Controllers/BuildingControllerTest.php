@@ -16,7 +16,7 @@ class BuildingControllerTest extends TestCase
     /** @var Building */
     private $building;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $this->building = new Building([

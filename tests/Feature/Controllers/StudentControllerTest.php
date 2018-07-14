@@ -18,7 +18,7 @@ class StudentControllerTest extends TestCase
     /** @var Student */
     private $teacher;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         /** @var User $user */

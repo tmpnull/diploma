@@ -17,7 +17,7 @@ class GroupControllerTest extends TestCase
     /** @var Group $group */
     private $group;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         /** @var Speciality $speciality */

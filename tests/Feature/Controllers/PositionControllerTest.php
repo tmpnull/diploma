@@ -16,7 +16,7 @@ class PositionControllerTest extends TestCase
     /** @var Position */
     private $position;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $this->position = new Position([

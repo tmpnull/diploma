@@ -17,7 +17,7 @@ class FileControllerTest extends TestCase
     /** @var File */
     private $file;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         /** @var User $user */

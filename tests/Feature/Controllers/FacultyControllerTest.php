@@ -16,7 +16,7 @@ class FacultyControllerTest extends TestCase
     /** @var Faculty */
     private $faculty;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $this->faculty = new Faculty([

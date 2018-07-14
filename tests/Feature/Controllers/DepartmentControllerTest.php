@@ -17,7 +17,7 @@ class DepartmentControllerTest extends TestCase
     /** @var Department */
     private $department;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         /** @var Faculty $faculty */

@@ -2,9 +2,11 @@
 
 namespace Tests;
 
+use App\User;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Passport\Passport;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -41,5 +43,12 @@ abstract class TestCase extends BaseTestCase
             'key' => $key,
             'value' => $value,
         ]);
+    }
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        Passport::actingAs(factory(User::class)->create());
     }
 }
