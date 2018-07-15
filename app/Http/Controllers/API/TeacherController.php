@@ -6,6 +6,7 @@ use App\Teacher;
 use App\Http\Resources\Teacher as TeacherResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Swagger\Annotations as OAS;
 
 class TeacherController extends Controller
 {
@@ -17,6 +18,12 @@ class TeacherController extends Controller
      *   summary="list teachers",
      *   tags={"teachers"},
      *   operationId="getFaculties",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *   @OAS\Response(
      *     response=200,
      *     description="A list with teachers",
@@ -48,6 +55,12 @@ class TeacherController extends Controller
      *     tags={"teachers"},
      *     summary="Add teacher",
      *     operationId="saveTeacher",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\RequestBody(
      *         description="add teacher",
      *         @OAS\MediaType(
@@ -73,15 +86,13 @@ class TeacherController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'user_id' => 'bail|required|exists:users,id|unique:teachers',
-            'department_id' => 'required|exists:departments,id',
-        ]);
+        $request->validate(['user_id' => 'bail|required|exists:users,id|unique:teachers', 'department_id' => 'required|exists:departments,id',]);
 
         $teacher = new Teacher($request->toArray());
         $teacher->save();
@@ -98,6 +109,12 @@ class TeacherController extends Controller
     For valid response try integer IDs with value >= 1 \ Other
     values will generated exceptions",
      *     operationId="getTeacherById",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="teacherId",
      *         in="path",
@@ -129,7 +146,8 @@ class TeacherController extends Controller
      *     ),
      * )
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -145,6 +163,12 @@ class TeacherController extends Controller
      *     tags={"teachers"},
      *     summary="Update an existing teacher",
      *     operationId="updateTeacher",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Response(
      *         response=400,
      *         description="Invalid ID supplied"
@@ -178,8 +202,9 @@ class TeacherController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -202,6 +227,12 @@ class TeacherController extends Controller
     For valid response try integer IDs with positive integer value.\ \
     Negative or non-integer values will generate API errors",
      *     operationId="deleteTeacher",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="teacherId",
      *         in="path",
@@ -223,7 +254,8 @@ class TeacherController extends Controller
      *     )
      * ),
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Swagger\Annotations as OAS;
 
 /**
  * Class Group
@@ -36,10 +37,7 @@ class Group extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'speciality_id',
-    ];
+    protected $fillable = ['name', 'speciality_id',];
 
     /**
      * Get the speciality record associated with the group.

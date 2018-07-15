@@ -4,8 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\User;
-use App\Department;
+use Swagger\Annotations as OAS;
 
 /**
  * Class Teacher
@@ -38,10 +37,7 @@ class Teacher extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'user_id',
-        'department_id',
-    ];
+    protected $fillable = ['user_id', 'department_id',];
 
     /**
      * Get the role record associated with the user.

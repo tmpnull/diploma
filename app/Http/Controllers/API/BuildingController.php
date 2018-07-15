@@ -6,6 +6,7 @@ use App\Building;
 use App\Http\Resources\Building as BuildingResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Swagger\Annotations as OAS;
 
 class BuildingController extends Controller
 {
@@ -17,6 +18,12 @@ class BuildingController extends Controller
      *   summary="list buildings",
      *   tags={"buildings"},
      *   operationId="getBuildings",
+     *   security={
+     *     {
+     *       "bearer": {},
+     *       "passport": {},
+     *     },
+     *   },
      *   @OAS\Response(
      *     response=200,
      *     description="A list with buildings",
@@ -48,6 +55,12 @@ class BuildingController extends Controller
      *     tags={"buildings"},
      *     summary="Add building",
      *     operationId="saveBuilding",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\RequestBody(
      *         description="add building",
      *         @OAS\MediaType(
@@ -73,15 +86,13 @@ class BuildingController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'bail|required|unique:buildings|max:255',
-            'abbreviation' => 'required|unique:buildings',
-        ]);
+        $request->validate(['name' => 'bail|required|unique:buildings|max:255', 'abbreviation' => 'required|unique:buildings',]);
 
         $building = new Building($request->toArray());
         $building->save();
@@ -98,6 +109,12 @@ class BuildingController extends Controller
     For valid response try integer IDs with value >= 1 \ Other
     values will generated exceptions",
      *     operationId="getBuildingById",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="buildingId",
      *         in="path",
@@ -129,7 +146,8 @@ class BuildingController extends Controller
      *     ),
      * )
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -145,6 +163,12 @@ class BuildingController extends Controller
      *     tags={"buildings"},
      *     summary="Update an existing building",
      *     operationId="updateBuilding",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Response(
      *         response=400,
      *         description="Invalid ID supplied"
@@ -178,8 +202,9 @@ class BuildingController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -202,6 +227,12 @@ class BuildingController extends Controller
     For valid response try integer IDs with positive integer value.\ \
     Negative or non-integer values will generate API errors",
      *     operationId="deleteBuilding",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="buildingId",
      *         in="path",
@@ -223,7 +254,8 @@ class BuildingController extends Controller
      *     )
      * ),
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

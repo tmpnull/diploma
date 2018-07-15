@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Services\UserService;
-use App\User;
-use App\Http\Resources\User as UserResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Swagger\Annotations as OAS;
 
 class UserController extends Controller
 {
@@ -30,6 +29,12 @@ class UserController extends Controller
      *   summary="list users",
      *   tags={"users"},
      *   operationId="getUsers",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *   @OAS\Response(
      *     response=200,
      *     description="A list with users",
@@ -61,6 +66,12 @@ class UserController extends Controller
      *     tags={"users"},
      *     summary="Add user",
      *     operationId="saveUser",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Response(
      *         response=200,
      *         description="successful operation",
@@ -82,17 +93,13 @@ class UserController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'bail|required|max:255',
-            'email' => 'required|unique:users|max:255',
-            'surname' => 'required',
-            'patronymic' => 'required',
-        ]);
+        $request->validate(['name' => 'bail|required|max:255', 'email' => 'required|unique:users|max:255', 'surname' => 'required', 'patronymic' => 'required',]);
         return response($this->userService->store($request->toArray()));
     }
 
@@ -106,6 +113,12 @@ class UserController extends Controller
     For valid response try integer IDs with value >= 1 \ Other
     values will generated exceptions",
      *     operationId="getUserById",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="userId",
      *         in="path",
@@ -137,7 +150,8 @@ class UserController extends Controller
      *     ),
      * )
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -153,6 +167,12 @@ class UserController extends Controller
      *     tags={"users"},
      *     summary="Update an existing user",
      *     operationId="updateUser",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Response(
      *         response=400,
      *         description="Invalid ID supplied"
@@ -186,8 +206,9 @@ class UserController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -207,6 +228,12 @@ class UserController extends Controller
     For valid response try integer IDs with positive integer value.\ \
     Negative or non-integer values will generate API errors",
      *     operationId="deleteUser",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="userId",
      *         in="path",
@@ -228,7 +255,8 @@ class UserController extends Controller
      *     )
      * ),
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\User;
+use Swagger\Annotations as OAS;
 
 /**
  * Class File
@@ -37,11 +37,7 @@ class File extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'user_id',
-        'path',
-    ];
+    protected $fillable = ['name', 'user_id', 'path',];
 
     /**
      * Get the user record associated with the department.
@@ -58,7 +54,5 @@ class File extends Model
      *
      * @var array
      */
-    protected $hidden = [
-        'path',
-    ];
+    protected $hidden = ['path',];
 }

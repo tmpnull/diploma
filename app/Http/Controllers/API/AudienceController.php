@@ -7,6 +7,7 @@ use App\Http\Resources\Audience as AudienceResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
+use Swagger\Annotations as OAS;
 
 class AudienceController extends Controller
 {
@@ -41,6 +42,7 @@ class AudienceController extends Controller
      * )
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -58,6 +60,12 @@ class AudienceController extends Controller
      *     tags={"audiences"},
      *     summary="Add audience",
      *     operationId="saveAudience",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Response(
      *         response=200,
      *         description="successful operation",
@@ -79,15 +87,13 @@ class AudienceController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'bail|required|unique:audiences|max:255',
-            'building_id' => 'required|exists:buildings,id',
-        ]);
+        $request->validate(['name' => 'bail|required|unique:audiences|max:255', 'building_id' => 'required|exists:buildings,id',]);
 
         $audience = new Audience($request->toArray());
         $audience->save();
@@ -104,6 +110,12 @@ class AudienceController extends Controller
     For valid response try integer IDs with value >= 1 \ Other
     values will generated exceptions",
      *     operationId="getAudienceById",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="audienceId",
      *         in="path",
@@ -135,7 +147,8 @@ class AudienceController extends Controller
      *     ),
      * )
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -151,6 +164,12 @@ class AudienceController extends Controller
      *     tags={"audiences"},
      *     summary="Update an existing audience",
      *     operationId="updateAudience",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Response(
      *         response=400,
      *         description="Invalid ID supplied"
@@ -184,15 +203,14 @@ class AudienceController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|unique:audiences,name|max:255'
-        ]);
+        $request->validate(['name' => 'required|unique:audiences,name|max:255']);
         /** @var Audience $audience */
         $audience = Audience::find($id);
         $audience->update($request->toArray());
@@ -210,6 +228,12 @@ class AudienceController extends Controller
     For valid response try integer IDs with positive integer value.\ \
     Negative or non-integer values will generate API errors",
      *     operationId="deleteAudience",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="audienceId",
      *         in="path",
@@ -231,7 +255,8 @@ class AudienceController extends Controller
      *     )
      * ),
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

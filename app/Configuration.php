@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\User;
+use Swagger\Annotations as OAS;
 
 /**
  * Class Configuration
@@ -37,8 +37,5 @@ class Configuration extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'key',
-        'value',
-    ];
+    protected $fillable = ['key', 'value',];
 }

@@ -17,6 +17,7 @@ class UserService
 
     /**
      * @param int $id
+     *
      * @return UserResource
      */
     public function show(int $id)
@@ -26,6 +27,7 @@ class UserService
 
     /**
      * @param array $data
+     *
      * @return UserResource
      */
     public function store(array $data)
@@ -40,6 +42,7 @@ class UserService
     /**
      * @param int $id
      * @param array $data
+     *
      * @return UserResource
      */
     public function update(int $id, array $data)
@@ -52,6 +55,7 @@ class UserService
 
     /**
      * @param int $id
+     *
      * @return int
      */
     public function destroy(int $id)

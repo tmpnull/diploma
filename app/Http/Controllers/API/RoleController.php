@@ -6,6 +6,7 @@ use App\Role;
 use App\Http\Resources\Role as RoleResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Swagger\Annotations as OAS;
 
 class RoleController extends Controller
 {
@@ -17,6 +18,12 @@ class RoleController extends Controller
      *   summary="list roles",
      *   tags={"roles"},
      *   operationId="getFaculties",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *   @OAS\Response(
      *     response=200,
      *     description="A list with roles",
@@ -48,6 +55,12 @@ class RoleController extends Controller
      *     tags={"roles"},
      *     summary="Add role",
      *     operationId="saveRole",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\RequestBody(
      *         description="add role",
      *         @OAS\MediaType(
@@ -73,14 +86,13 @@ class RoleController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'bail|required|unique:roles|max:255',
-        ]);
+        $request->validate(['name' => 'bail|required|unique:roles|max:255',]);
 
         $role = new Role($request->toArray());
         $role->save();
@@ -97,6 +109,12 @@ class RoleController extends Controller
     For valid response try integer IDs with value >= 1 \ Other
     values will generated exceptions",
      *     operationId="getRoleById",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="roleId",
      *         in="path",
@@ -128,7 +146,8 @@ class RoleController extends Controller
      *     ),
      * )
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -144,6 +163,12 @@ class RoleController extends Controller
      *     tags={"roles"},
      *     summary="Update an existing role",
      *     operationId="updateRole",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Response(
      *         response=400,
      *         description="Invalid ID supplied"
@@ -177,8 +202,9 @@ class RoleController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -201,6 +227,12 @@ class RoleController extends Controller
     For valid response try integer IDs with positive integer value.\ \
     Negative or non-integer values will generate API errors",
      *     operationId="deleteRole",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="roleId",
      *         in="path",
@@ -222,7 +254,8 @@ class RoleController extends Controller
      *     )
      * ),
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

@@ -6,6 +6,7 @@ use App\Course;
 use App\Http\Resources\Course as CourseResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Swagger\Annotations as OAS;
 
 class CourseController extends Controller
 {
@@ -13,14 +14,20 @@ class CourseController extends Controller
      * Display a listing of the resource.
      *
      * @OAS\Get(
-     *   path="/api/courses",
-     *   summary="list courses",
-     *   tags={"courses"},
-     *   operationId="getFaculties",
-     *   @OAS\Response(
-     *     response=200,
-     *     description="A list with courses",
-     *     @OAS\MediaType(
+     *     path="/api/courses",
+     *     summary="list courses",
+     *     tags={"courses"},
+     *     operationId="getFaculties",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
+     *     @OAS\Response(
+     *       response=200,
+     *       description="A list with courses",
+     *       @OAS\MediaType(
      *              mediaType="application/json",
      *              @OAS\Schema(
      *                  type="array",
@@ -48,6 +55,12 @@ class CourseController extends Controller
      *     tags={"courses"},
      *     summary="Add course",
      *     operationId="saveCourse",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\RequestBody(
      *         description="add course",
      *         @OAS\MediaType(
@@ -98,6 +111,12 @@ class CourseController extends Controller
     For valid response try integer IDs with value >= 1 \ Other
     values will generated exceptions",
      *     operationId="getCourseById",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="courseId",
      *         in="path",
@@ -145,6 +164,12 @@ class CourseController extends Controller
      *     tags={"courses"},
      *     summary="Update an existing course",
      *     operationId="updateCourse",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Response(
      *         response=400,
      *         description="Invalid ID supplied"
@@ -202,6 +227,12 @@ class CourseController extends Controller
     For valid response try integer IDs with positive integer value.\ \
     Negative or non-integer values will generate API errors",
      *     operationId="deleteCourse",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="courseId",
      *         in="path",

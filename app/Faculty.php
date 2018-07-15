@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Swagger\Annotations as OAS;
 
 /**
  * Class Faculty
@@ -41,9 +42,5 @@ class Faculty extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'number',
-        'abbreviation',
-    ];
+    protected $fillable = ['name', 'number', 'abbreviation',];
 }

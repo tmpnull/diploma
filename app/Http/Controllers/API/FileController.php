@@ -6,6 +6,7 @@ use App\File;
 use App\Http\Resources\File as FileResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Swagger\Annotations as OAS;
 
 class FileController extends Controller
 {
@@ -17,6 +18,12 @@ class FileController extends Controller
      *   summary="list files",
      *   tags={"files"},
      *   operationId="getFaculties",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *   @OAS\Response(
      *     response=200,
      *     description="A list with files",
@@ -48,6 +55,12 @@ class FileController extends Controller
      *     tags={"files"},
      *     summary="Add file",
      *     operationId="saveFile",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\RequestBody(
      *         description="add file",
      *         @OAS\MediaType(
@@ -98,6 +111,12 @@ class FileController extends Controller
     For valid response try integer IDs with value >= 1 \ Other
     values will generated exceptions",
      *     operationId="getFileById",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="fileId",
      *         in="path",
@@ -145,6 +164,12 @@ class FileController extends Controller
      *     tags={"files"},
      *     summary="Update an existing file",
      *     operationId="updateFile",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Response(
      *         response=400,
      *         description="Invalid ID supplied"
@@ -202,6 +227,12 @@ class FileController extends Controller
     For valid response try integer IDs with positive integer value.\ \
     Negative or non-integer values will generate API errors",
      *     operationId="deleteFile",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="fileId",
      *         in="path",

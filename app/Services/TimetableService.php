@@ -23,6 +23,7 @@ class TimetableService
 
     /**
      * @param int $id
+     *
      * @return TimetableResource
      */
     public function show(int $id): TimetableResource
@@ -33,6 +34,7 @@ class TimetableService
     /**
      * @param int $id
      * @param TimetableQueryParameters $queryParameters
+     *
      * @return TimetableResource
      */
     public function showByGroupId(int $id, TimetableQueryParameters $queryParameters): TimetableResource
@@ -54,6 +56,7 @@ class TimetableService
     /**
      * @param int $id
      * @param TimetableQueryParameters $queryParameters
+     *
      * @return TimetableResource
      */
     public function showByTeacherId(int $id, TimetableQueryParameters $queryParameters): TimetableResource
@@ -75,6 +78,7 @@ class TimetableService
 
     /**
      * @param array $data
+     *
      * @return TimetableResource
      */
     public function store(array $data): TimetableResource
@@ -88,6 +92,7 @@ class TimetableService
     /**
      * @param int $id
      * @param array $data
+     *
      * @return TimetableResource
      */
     public function update(int $id, array $data): TimetableResource
@@ -101,6 +106,7 @@ class TimetableService
 
     /**
      * @param int $id
+     *
      * @return int
      */
     public function destroy(int $id): int
@@ -112,6 +118,7 @@ class TimetableService
      * @param \Illuminate\Database\Eloquent\Collection $collection
      * @param TimetableQueryParameters $queryParameters
      * @param \Illuminate\Support\Collection $datesOfStartSemesters
+     *
      * @return mixed
      */
     private function filterBySemester($collection, $queryParameters, $datesOfStartSemesters)
@@ -120,10 +127,7 @@ class TimetableService
             $semester = $queryParameters->getSemester();
             if ($semester === TimetableQueryParameters::$SEMESTER_AUTO) {
                 if ($queryParameters->getDate()) {
-                    $semester = $queryParameters->getDate()->between(
-                        $datesOfStartSemesters->get(0),
-                        $datesOfStartSemesters->get(1)
-                    ) ? 'first' : 'second';
+                    $semester = $queryParameters->getDate()->between($datesOfStartSemesters->get(0), $datesOfStartSemesters->get(1)) ? 'first' : 'second';
                 } else {
                     return $collection;
                 }
@@ -132,7 +136,7 @@ class TimetableService
             $requested = $semester === TimetableQueryParameters::$SEMESTER_FIRST;
 
             $collection = $collection->filter(function (Timetable $timetable) use ($requested) {
-                return (bool) $timetable->getAttribute('is_first_semester') === $requested;
+                return (bool)$timetable->getAttribute('is_first_semester') === $requested;
             });
         }
 
@@ -143,6 +147,7 @@ class TimetableService
      * @param \Illuminate\Database\Eloquent\Collection $collection
      * @param TimetableQueryParameters $queryParameters
      * @param \Illuminate\Support\Collection $datesOfStartSemesters
+     *
      * @return \Illuminate\Database\Eloquent\Collection
      */
     private function filterByDividend($collection, $queryParameters, $datesOfStartSemesters): Collection
@@ -152,22 +157,16 @@ class TimetableService
             if ($dividend === TimetableQueryParameters::$DIVIDEND_AUTO) {
                 $date = $queryParameters->getDate();
                 if ($date) {
-                    $date->between(
-                        $datesOfStartSemesters->get(0),
-                        $datesOfStartSemesters->get(1)
-                    ) ? $weekOfSemesterStart = $datesOfStartSemesters->get(0)->weekOfYear
-                        : $weekOfSemesterStart = $datesOfStartSemesters->get(1)->weekOfYear;
+                    $date->between($datesOfStartSemesters->get(0), $datesOfStartSemesters->get(1)) ? $weekOfSemesterStart = $datesOfStartSemesters->get(0)->weekOfYear : $weekOfSemesterStart = $datesOfStartSemesters->get(1)->weekOfYear;
                     $weekNumber = $date->weekOfYear;
-                    $dividend = $this->isNumerator($weekOfSemesterStart, $weekNumber)
-                        ? TimetableQueryParameters::$DIVIDEND_NUMERATOR
-                        : TimetableQueryParameters::$DIVIDEND_DENOMINATOR;
+                    $dividend = $this->isNumerator($weekOfSemesterStart, $weekNumber) ? TimetableQueryParameters::$DIVIDEND_NUMERATOR : TimetableQueryParameters::$DIVIDEND_DENOMINATOR;
                 }
             }
 
             $requested = $dividend === TimetableQueryParameters::$DIVIDEND_NUMERATOR;
 
             $collection = $collection->filter(function (Timetable $timetable) use ($requested) {
-                return (bool) $timetable->getAttribute('is_numerator') === $requested;
+                return (bool)$timetable->getAttribute('is_numerator') === $requested;
             });
         }
 
@@ -177,6 +176,7 @@ class TimetableService
     /**
      * @param \Illuminate\Database\Eloquent\Collection $collection
      * @param TimetableQueryParameters $queryParameters
+     *
      * @return mixed
      */
     private function filterByDay($collection, $queryParameters)
@@ -196,6 +196,7 @@ class TimetableService
      *
      * @param int $startOfSemester
      * @param int $weekNumber
+     *
      * @return bool
      */
     private function isNumerator(int $startOfSemester, int $weekNumber): bool
@@ -212,10 +213,7 @@ class TimetableService
     private function getDatesOfStartSemesters(): \Illuminate\Support\Collection
     {
         /** @var \Illuminate\Database\Eloquent\Collection $datesOfStartSemesters */
-        $datesOfStartSemesters = Configuration::whereIn('key', [
-            'start_of_first_semester',
-            'start_of_second_semester',
-        ])->get()->map(function ($item) {
+        $datesOfStartSemesters = Configuration::whereIn('key', ['start_of_first_semester', 'start_of_second_semester',])->get()->map(function ($item) {
             return new Carbon($item->getAttribute('value'));
         });
 

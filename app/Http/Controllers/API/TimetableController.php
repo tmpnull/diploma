@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Services\TimetableService;
-use Exception;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\QueryParameters\TimetableQueryParameters;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
+use Swagger\Annotations as OAS;
 
 class TimetableController extends Controller
 {
@@ -32,6 +32,12 @@ class TimetableController extends Controller
      *   summary="list timetables",
      *   tags={"timetables"},
      *   operationId="getTimetables",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *   @OAS\Response(
      *     response=200,
      *     description="A list with timetables",
@@ -63,6 +69,12 @@ class TimetableController extends Controller
      *     tags={"timetables"},
      *     summary="Add new course to the timetable",
      *     operationId="saveTimetable",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Response(
      *         response=200,
      *         description="successful operation",
@@ -85,22 +97,13 @@ class TimetableController extends Controller
      * )
      *
      * @param  Request $request
+     *
      * @return Response
      */
     public function store(Request $request): Response
     {
-        $request->validate(
-            [
-                'course_id' => 'bail|required|exists:courses,id|unique_with:timetables,day_of_week,number,is_numerator,
-                group_id,audience_id',
-                'day_of_week' => 'required',
-                'number' => 'required',
-                'is_numerator' => 'required',
-                'is_first_semester' => 'required',
-                'group_id' => 'required|exists:groups,id',
-                'audience_id' => 'required|exists:audiences,id',
-            ]
-        );
+        $request->validate(['course_id' => 'bail|required|exists:courses,id|unique_with:timetables,day_of_week,number,is_numerator,
+                group_id,audience_id', 'day_of_week' => 'required', 'number' => 'required', 'is_numerator' => 'required', 'is_first_semester' => 'required', 'group_id' => 'required|exists:groups,id', 'audience_id' => 'required|exists:audiences,id',]);
 
         return response($this->timetableService->store($request->toArray()));
     }
@@ -115,6 +118,12 @@ class TimetableController extends Controller
     For valid response try integer IDs with value >= 1 \ Other
     values will generated exceptions",
      *     operationId="getTimetableById",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="userId",
      *         in="path",
@@ -147,6 +156,7 @@ class TimetableController extends Controller
      * )
      *
      * @param  int $id
+     *
      * @return Response
      */
     public function show($id): Response
@@ -164,6 +174,12 @@ class TimetableController extends Controller
     For valid response try integer IDs with value >= 1 \ Other
     values will generated exceptions",
      *     operationId="getTimetableByGroupId",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="groupId",
      *         in="path",
@@ -232,17 +248,12 @@ class TimetableController extends Controller
      *
      * @param Request $request
      * @param  int $id
+     *
      * @return Response
      */
     public function showByGroupId(Request $request, int $id): Response
     {
-        $validator = Validator::make($request->all(), [
-            'dividend' => 'in:numerator,denominator,auto',
-            'semester' => 'in:first,second,auto',
-            'date' => 'bail|date_format:Y-m-d|required_if:semester,auto|required_if:date,auto',
-            'day' => 'integer|min:1|max:5',
-            'id' => 'exists:groups,id'
-        ]);
+        $validator = Validator::make($request->all(), ['dividend' => 'in:numerator,denominator,auto', 'semester' => 'in:first,second,auto', 'date' => 'bail|date_format:Y-m-d|required_if:semester,auto|required_if:date,auto', 'day' => 'integer|min:1|max:5', 'id' => 'exists:groups,id']);
         if ($validator->fails()) {
             return response($validator->errors()->all(), 403);
         }
@@ -261,6 +272,12 @@ class TimetableController extends Controller
     For valid response try integer IDs with value >= 1 \ Other
     values will generated exceptions",
      *     operationId="getTimetableByTeacherId",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="teacherId",
      *         in="path",
@@ -329,16 +346,12 @@ class TimetableController extends Controller
      *
      * @param Request $request
      * @param  int $id
+     *
      * @return Response
      */
     public function showByTeacherId(Request $request, int $id): Response
     {
-        $validator = Validator::make($request->all(), [
-            'dividend' => 'bail|in:numerator,denominator,auto',
-            'date' => 'required_if:dividend,auto|date_format:Y-m-d',
-            'day' => 'day|integer|min:1|max:5',
-            'id' => 'exists:teachers,id'
-        ]);
+        $validator = Validator::make($request->all(), ['dividend' => 'bail|in:numerator,denominator,auto', 'date' => 'required_if:dividend,auto|date_format:Y-m-d', 'day' => 'day|integer|min:1|max:5', 'id' => 'exists:teachers,id']);
         if ($validator->fails()) {
             return response($validator->errors()->all(), 403);
         }
@@ -355,6 +368,12 @@ class TimetableController extends Controller
      *     tags={"timetables"},
      *     summary="Update an existing user",
      *     operationId="updateTimetable",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Response(
      *         response=400,
      *         description="Invalid ID supplied"
@@ -390,6 +409,7 @@ class TimetableController extends Controller
      *
      * @param  Request $request
      * @param  int $id
+     *
      * @return Response
      */
     public function update(Request $request, $id): Response
@@ -410,6 +430,12 @@ class TimetableController extends Controller
     For valid response try integer IDs with positive integer value.\ \
     Negative or non-integer values will generate API errors",
      *     operationId="deleteTimetable",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="userId",
      *         in="path",
@@ -432,6 +458,7 @@ class TimetableController extends Controller
      * ),
      *
      * @param  int $id
+     *
      * @return Response
      */
     public function destroy($id)

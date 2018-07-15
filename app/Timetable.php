@@ -4,9 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Course;
-use App\Group;
-use App\Audience;
+use Swagger\Annotations as OAS;
 
 /**
  * Class Timetable

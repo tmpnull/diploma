@@ -6,6 +6,7 @@ use App\Position;
 use App\Http\Resources\Position as PositionResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Swagger\Annotations as OAS;
 
 class PositionController extends Controller
 {
@@ -17,6 +18,12 @@ class PositionController extends Controller
      *   summary="list positions",
      *   tags={"positions"},
      *   operationId="getFaculties",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *   @OAS\Response(
      *     response=200,
      *     description="A list with positions",
@@ -48,6 +55,12 @@ class PositionController extends Controller
      *     tags={"positions"},
      *     summary="Add position",
      *     operationId="savePosition",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\RequestBody(
      *         description="add position",
      *         @OAS\MediaType(
@@ -73,14 +86,13 @@ class PositionController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'bail|required|unique:positions|max:255',
-        ]);
+        $request->validate(['name' => 'bail|required|unique:positions|max:255',]);
 
         $position = new Position($request->toArray());
         $position->save();
@@ -97,6 +109,12 @@ class PositionController extends Controller
     For valid response try integer IDs with value >= 1 \ Other
     values will generated exceptions",
      *     operationId="getPositionById",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="positionId",
      *         in="path",
@@ -128,7 +146,8 @@ class PositionController extends Controller
      *     ),
      * )
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -144,6 +163,12 @@ class PositionController extends Controller
      *     tags={"positions"},
      *     summary="Update an existing position",
      *     operationId="updatePosition",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Response(
      *         response=400,
      *         description="Invalid ID supplied"
@@ -177,8 +202,9 @@ class PositionController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -201,6 +227,12 @@ class PositionController extends Controller
     For valid response try integer IDs with positive integer value.\ \
     Negative or non-integer values will generate API errors",
      *     operationId="deletePosition",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="positionId",
      *         in="path",
@@ -222,7 +254,8 @@ class PositionController extends Controller
      *     )
      * ),
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

@@ -6,6 +6,7 @@ use App\Department;
 use App\Http\Resources\Department as DepartmentResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Swagger\Annotations as OAS;
 
 class DepartmentController extends Controller
 {
@@ -17,6 +18,12 @@ class DepartmentController extends Controller
      *   summary="list departments",
      *   tags={"departments"},
      *   operationId="getDepartments",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *   @OAS\Response(
      *     response=200,
      *     description="A list with departments",
@@ -48,6 +55,12 @@ class DepartmentController extends Controller
      *     tags={"departments"},
      *     summary="Add department",
      *     operationId="saveDepartment",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Response(
      *         response=200,
      *         description="successful operation",
@@ -69,17 +82,13 @@ class DepartmentController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'bail|required|unique:departments|max:255',
-            'number' => 'required|unique:departments',
-            'abbreviation' => 'required|unique:departments',
-            'faculty_id' => 'required|exists:faculties,id',
-        ]);
+        $request->validate(['name' => 'bail|required|unique:departments|max:255', 'number' => 'required|unique:departments', 'abbreviation' => 'required|unique:departments', 'faculty_id' => 'required|exists:faculties,id',]);
 
         $department = new Department($request->toArray());
         $department->save();
@@ -96,6 +105,12 @@ class DepartmentController extends Controller
     For valid response try integer IDs with value >= 1 \ Other
     values will generated exceptions",
      *     operationId="getDepartmentById",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="departmentId",
      *         in="path",
@@ -127,7 +142,8 @@ class DepartmentController extends Controller
      *     ),
      * )
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -143,6 +159,12 @@ class DepartmentController extends Controller
      *     tags={"departments"},
      *     summary="Update an existing department",
      *     operationId="updateDepartment",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Response(
      *         response=400,
      *         description="Invalid ID supplied"
@@ -176,8 +198,9 @@ class DepartmentController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -199,6 +222,12 @@ class DepartmentController extends Controller
     For valid response try integer IDs with positive integer value.\ \
     Negative or non-integer values will generate API errors",
      *     operationId="deleteDepartment",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="departmentId",
      *         in="path",
@@ -220,7 +249,8 @@ class DepartmentController extends Controller
      *     )
      * ),
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

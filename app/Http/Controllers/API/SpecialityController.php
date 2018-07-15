@@ -6,6 +6,7 @@ use App\Speciality;
 use App\Http\Resources\Speciality as SpecialityResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Swagger\Annotations as OAS;
 
 class SpecialityController extends Controller
 {
@@ -17,6 +18,12 @@ class SpecialityController extends Controller
      *   summary="list specialities",
      *   tags={"specialities"},
      *   operationId="getSpecialities",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *   @OAS\Response(
      *     response=200,
      *     description="A list with specialities",
@@ -48,6 +55,12 @@ class SpecialityController extends Controller
      *     tags={"specialities"},
      *     summary="Add speciality",
      *     operationId="saveSpeciality",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Response(
      *         response=200,
      *         description="successful operation",
@@ -69,16 +82,13 @@ class SpecialityController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'bail|required|unique:specialities|max:255',
-            'number' => 'required|unique:specialities',
-            'department_id' => 'required|exists:departments,id',
-        ]);
+        $request->validate(['name' => 'bail|required|unique:specialities|max:255', 'number' => 'required|unique:specialities', 'department_id' => 'required|exists:departments,id',]);
 
         $speciality = new Speciality($request->toArray());
         $speciality->save();
@@ -95,6 +105,12 @@ class SpecialityController extends Controller
     For valid response try integer IDs with value >= 1 \ Other
     values will generated exceptions",
      *     operationId="getSpecialityById",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="specialityId",
      *         in="path",
@@ -126,7 +142,8 @@ class SpecialityController extends Controller
      *     ),
      * )
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -142,6 +159,12 @@ class SpecialityController extends Controller
      *     tags={"specialities"},
      *     summary="Update an existing speciality",
      *     operationId="updateSpeciality",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Response(
      *         response=400,
      *         description="Invalid ID supplied"
@@ -175,8 +198,9 @@ class SpecialityController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -198,6 +222,12 @@ class SpecialityController extends Controller
     For valid response try integer IDs with positive integer value.\ \
     Negative or non-integer values will generate API errors",
      *     operationId="deleteSpeciality",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="specialityId",
      *         in="path",
@@ -219,7 +249,8 @@ class SpecialityController extends Controller
      *     )
      * ),
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

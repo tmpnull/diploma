@@ -5,9 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use App\Degree;
-use App\Role;
-use App\Position;
+use Swagger\Annotations as OAS;
 use Laravel\Passport\HasApiTokens;
 
 /**
@@ -93,8 +91,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name',
-        'surname',
+        'name', 'surname',
         'patronymic',
         'date_of_birth',
         'email',
@@ -113,10 +110,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = ['password', 'remember_token',];
 
     /**
      * Get the degree record associated with the department.

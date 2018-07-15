@@ -6,6 +6,7 @@ use App\Group;
 use App\Http\Resources\Group as GroupResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Swagger\Annotations as OAS;
 
 class GroupController extends Controller
 {
@@ -17,6 +18,12 @@ class GroupController extends Controller
      *   summary="list groups",
      *   tags={"groups"},
      *   operationId="getGroups",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *   @OAS\Response(
      *     response=200,
      *     description="A list with groups",
@@ -48,6 +55,12 @@ class GroupController extends Controller
      *     tags={"groups"},
      *     summary="Add group",
      *     operationId="saveGroup",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Response(
      *         response=200,
      *         description="successful operation",
@@ -69,17 +82,13 @@ class GroupController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $request->validate(
-            [
-                'name' => 'bail|required|unique:groups|max:255',
-                'speciality_id' => 'required|exists:specialities,id',
-            ]
-        );
+        $request->validate(['name' => 'bail|required|unique:groups|max:255', 'speciality_id' => 'required|exists:specialities,id',]);
 
         $group = new Group($request->toArray());
         $group->save();
@@ -96,6 +105,12 @@ class GroupController extends Controller
     For valid response try integer IDs with value >= 1 \ Other
     values will generated exceptions",
      *     operationId="getGroupById",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="groupId",
      *         in="path",
@@ -127,7 +142,8 @@ class GroupController extends Controller
      *     ),
      * )
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -143,6 +159,12 @@ class GroupController extends Controller
      *     tags={"groups"},
      *     summary="Update an existing group",
      *     operationId="updateGroup",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Response(
      *         response=400,
      *         description="Invalid ID supplied"
@@ -176,8 +198,9 @@ class GroupController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -199,6 +222,12 @@ class GroupController extends Controller
     For valid response try integer IDs with positive integer value.\ \
     Negative or non-integer values will generate API errors",
      *     operationId="deleteGroup",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="groupId",
      *         in="path",
@@ -220,7 +249,8 @@ class GroupController extends Controller
      *     )
      * ),
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

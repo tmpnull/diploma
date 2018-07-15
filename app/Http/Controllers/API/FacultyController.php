@@ -6,6 +6,7 @@ use App\Faculty;
 use App\Http\Resources\Faculty as FacultyResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Swagger\Annotations as OAS;
 
 class FacultyController extends Controller
 {
@@ -17,6 +18,12 @@ class FacultyController extends Controller
      *   summary="list faculties",
      *   tags={"faculties"},
      *   operationId="getFaculties",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *   @OAS\Response(
      *     response=200,
      *     description="A list with faculties",
@@ -48,6 +55,12 @@ class FacultyController extends Controller
      *     tags={"faculties"},
      *     summary="Add faculty",
      *     operationId="saveFaculty",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\RequestBody(
      *         description="add faculty",
      *         @OAS\MediaType(
@@ -73,16 +86,13 @@ class FacultyController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'bail|required|unique:faculties|max:255',
-            'number' => 'required|unique:faculties',
-            'abbreviation' => 'required|unique:faculties',
-        ]);
+        $request->validate(['name' => 'bail|required|unique:faculties|max:255', 'number' => 'required|unique:faculties', 'abbreviation' => 'required|unique:faculties',]);
 
         $faculty = new Faculty($request->toArray());
         $faculty->save();
@@ -99,6 +109,12 @@ class FacultyController extends Controller
     For valid response try integer IDs with value >= 1 \ Other
     values will generated exceptions",
      *     operationId="getFacultyById",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="facultyId",
      *         in="path",
@@ -130,7 +146,8 @@ class FacultyController extends Controller
      *     ),
      * )
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -146,6 +163,12 @@ class FacultyController extends Controller
      *     tags={"faculties"},
      *     summary="Update an existing faculty",
      *     operationId="updateFaculty",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Response(
      *         response=400,
      *         description="Invalid ID supplied"
@@ -179,8 +202,9 @@ class FacultyController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -203,6 +227,12 @@ class FacultyController extends Controller
     For valid response try integer IDs with positive integer value.\ \
     Negative or non-integer values will generate API errors",
      *     operationId="deleteFaculty",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="facultyId",
      *         in="path",
@@ -224,7 +254,8 @@ class FacultyController extends Controller
      *     )
      * ),
      *
-     * @param  int  $id
+     * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

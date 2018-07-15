@@ -6,6 +6,7 @@ use App\Configuration;
 use App\Http\Resources\Configuration as ConfigurationResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Swagger\Annotations as OAS;
 
 class ConfigurationController extends Controller
 {
@@ -17,6 +18,12 @@ class ConfigurationController extends Controller
      *   summary="list configurations",
      *   tags={"configurations"},
      *   operationId="getFaculties",
+     *   security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *   @OAS\Response(
      *     response=200,
      *     description="A list with configurations",
@@ -48,6 +55,12 @@ class ConfigurationController extends Controller
      *     tags={"configurations"},
      *     summary="Add configuration",
      *     operationId="saveConfiguration",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\RequestBody(
      *         description="add configuration",
      *         @OAS\MediaType(
@@ -97,6 +110,12 @@ class ConfigurationController extends Controller
     For valid response try integer IDs with value >= 1 \ Other
     values will generated exceptions",
      *     operationId="getConfigurationById",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="configurationId",
      *         in="path",
@@ -144,6 +163,12 @@ class ConfigurationController extends Controller
      *     tags={"configurations"},
      *     summary="Update an existing configuration",
      *     operationId="updateConfiguration",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Response(
      *         response=400,
      *         description="Invalid ID supplied"
@@ -201,6 +226,12 @@ class ConfigurationController extends Controller
     For valid response try integer IDs with positive integer value.\ \
     Negative or non-integer values will generate API errors",
      *     operationId="deleteConfiguration",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
      *     @OAS\Parameter(
      *         name="configurationId",
      *         in="path",

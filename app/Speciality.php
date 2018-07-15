@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Swagger\Annotations as OAS;
 
 /**
  * Class Speciality
@@ -41,11 +42,7 @@ class Speciality extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'number',
-        'department_id',
-    ];
+    protected $fillable = ['name', 'number', 'department_id',];
 
     /**
      * Get the faculty record associated with the speciality.
