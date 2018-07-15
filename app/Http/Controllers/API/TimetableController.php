@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Services\TimetableService;
+use App\Timetable;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\QueryParameters\TimetableQueryParameters;
@@ -99,11 +100,22 @@ class TimetableController extends Controller
      * @param  Request $request
      *
      * @return Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(Request $request): Response
     {
-        $request->validate(['course_id' => 'bail|required|exists:courses,id|unique_with:timetables,day_of_week,number,is_numerator,
-                group_id,audience_id', 'day_of_week' => 'required', 'number' => 'required', 'is_numerator' => 'required', 'is_first_semester' => 'required', 'group_id' => 'required|exists:groups,id', 'audience_id' => 'required|exists:audiences,id',]);
+        $this->authorize('create', Timetable::class);
+
+        $request->validate([
+            'course_id' => 'bail|required|exists:courses,id|unique_with:timetables,day_of_week,number,is_numerator,
+                group_id,audience_id',
+            'day_of_week' => 'required',
+            'number' => 'required',
+            'is_numerator' => 'required',
+            'is_first_semester' => 'required',
+            'group_id' => 'required|exists:groups,id',
+            'audience_id' => 'required|exists:audiences,id',
+        ]);
 
         return response($this->timetableService->store($request->toArray()));
     }
@@ -253,7 +265,13 @@ class TimetableController extends Controller
      */
     public function showByGroupId(Request $request, int $id): Response
     {
-        $validator = Validator::make($request->all(), ['dividend' => 'in:numerator,denominator,auto', 'semester' => 'in:first,second,auto', 'date' => 'bail|date_format:Y-m-d|required_if:semester,auto|required_if:date,auto', 'day' => 'integer|min:1|max:5', 'id' => 'exists:groups,id']);
+        $validator = Validator::make($request->all(), [
+            'dividend' => 'in:numerator,denominator,auto',
+            'semester' => 'in:first,second,auto',
+            'date' => 'bail|date_format:Y-m-d|required_if:semester,auto|required_if:date,auto',
+            'day' => 'integer|min:1|max:5',
+            'id' => 'exists:groups,id',
+        ]);
         if ($validator->fails()) {
             return response($validator->errors()->all(), 403);
         }
@@ -351,7 +369,12 @@ class TimetableController extends Controller
      */
     public function showByTeacherId(Request $request, int $id): Response
     {
-        $validator = Validator::make($request->all(), ['dividend' => 'bail|in:numerator,denominator,auto', 'date' => 'required_if:dividend,auto|date_format:Y-m-d', 'day' => 'day|integer|min:1|max:5', 'id' => 'exists:teachers,id']);
+        $validator = Validator::make($request->all(), [
+            'dividend' => 'bail|in:numerator,denominator,auto',
+            'date' => 'required_if:dividend,auto|date_format:Y-m-d',
+            'day' => 'day|integer|min:1|max:5',
+            'id' => 'exists:teachers,id',
+        ]);
         if ($validator->fails()) {
             return response($validator->errors()->all(), 403);
         }
@@ -411,9 +434,11 @@ class TimetableController extends Controller
      * @param  int $id
      *
      * @return Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(Request $request, $id): Response
     {
+        $this->authorize('update', Timetable::class);
         $data = $request->toArray();
 
         return response($this->timetableService->update($id, $data));
@@ -460,9 +485,12 @@ class TimetableController extends Controller
      * @param  int $id
      *
      * @return Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy($id)
     {
+        $this->authorize('delete', Timetable::class);
+
         return response($this->timetableService->destroy($id));
     }
 }

@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Policies\TimetablePolicy;
+use App\Policies\UserPolicy;
+use App\Timetable;
+use App\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Laravel\Passport\Passport;
@@ -15,6 +19,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Model' => 'App\Policies\ModelPolicy',
+        Timetable::class => TimetablePolicy::class,
+        User::class => UserPolicy::class,
     ];
 
     /**

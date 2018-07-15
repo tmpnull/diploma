@@ -91,7 +91,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'surname',
+        'name',
+        'surname',
         'patronymic',
         'date_of_birth',
         'email',
@@ -140,5 +141,35 @@ class User extends Authenticatable
     public function position()
     {
         return $this->belongsTo(Position::class);
+    }
+
+    public function authorizeRoles($roles)
+    {
+        if (\is_array($roles)) {
+            return $this->hasAnyRole($roles);
+        }
+
+        return $this->hasRole($roles);
+    }
+
+    /**
+     * @param $roles
+     * @return bool
+     */
+    public function hasAnyRole($roles): bool
+    {
+        $userRole = $userRole = $this->role();
+
+        if ($userRole) {
+            return \in_array($this->role()->first()->name, $roles, false);
+        }
+
+        return false;
+    }
+
+    public function hasRole($role): bool
+    {
+        $userRole = $this->role()->first();
+        return $userRole ? $userRole->name === $role : false;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::group(['middleware' => ['auth:api']], function () {
+Route::group([
+    'middleware' => [
+        'auth:api',
+    ],
+], function () {
     Route::apiResources([
         'audiences' => 'API\AudienceController',
         'buildings' => 'API\BuildingController',

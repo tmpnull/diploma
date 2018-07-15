@@ -24,7 +24,7 @@ class TimetableServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('App\Services\TimetableService', function ($app) {
+        $this->app->bind(TimetableService::class, function ($app) {
             return new TimetableService();
         });
     }

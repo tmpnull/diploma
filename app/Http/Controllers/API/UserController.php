@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Services\UserService;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Swagger\Annotations as OAS;
@@ -52,9 +53,11 @@ class UserController extends Controller
      * )
      *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index()
     {
+        $this->authorize('view', User::class);
         return response($this->userService->index());
     }
 
@@ -96,9 +99,11 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function store(Request $request)
     {
+        $this->authorize('create', User::class);
         $request->validate(['name' => 'bail|required|max:255', 'email' => 'required|unique:users|max:255', 'surname' => 'required', 'patronymic' => 'required',]);
         return response($this->userService->store($request->toArray()));
     }
@@ -210,9 +215,11 @@ class UserController extends Controller
      * @param  int $id
      *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(Request $request, $id)
     {
+        $this->authorize('update', User::class);
         $data = $request->toArray();
         return response($this->userService->update($id, $data));
     }
@@ -258,9 +265,11 @@ class UserController extends Controller
      * @param  int $id
      *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy($id)
     {
+        $this->authorize('delete', User::class);
         return response($this->userService->destroy($id));
     }
 }
