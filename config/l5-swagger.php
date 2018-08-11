@@ -143,6 +143,14 @@ return [
             'in' => 'header',
             'scheme' => 'http',
             'flows' => [
+                "authorizationCode" => [
+                    'description' => 'Laravel authorization code oauth2 security.',
+                    'flow' => 'authorizationCode', // The flow used by the OAuth2 security scheme. Valid values are "implicit", "password", "clientCredentials" or "authorizationCode".
+                    'tokenUrl' => 'http://homestead.test/oauth/token', // The authorization URL to be used for (password/application/accessCode)
+                    "refreshUrl" => 'http://homestead.test/token/refresh',
+                    "authorizationUrl" => 'http://homestead.test/oauth/authorize',
+                    'scopes' => []
+                ],
                 "password" => [
                     'description' => 'Laravel passport oauth2 security.',
                     'flow' => 'password', // The flow used by the OAuth2 security scheme. Valid values are "implicit", "password", "clientCredentials" or "authorizationCode".
@@ -156,14 +164,6 @@ return [
 //                    "authorizationUrl" => 'http://homestead.test/oauth/authorize',
 //                    'scopes' => []
 //                ],
-                "authorizationCode" => [
-                    'description' => 'Laravel authorization code oauth2 security.',
-                    'flow' => 'authorizationCode', // The flow used by the OAuth2 security scheme. Valid values are "implicit", "password", "clientCredentials" or "authorizationCode".
-                    'tokenUrl' => 'http://homestead.test/oauth/token', // The authorization URL to be used for (password/application/accessCode)
-                    "refreshUrl" => 'http://homestead.test/token/refresh',
-                    "authorizationUrl" => 'http://homestead.test/oauth/authorize',
-                    'scopes' => []
-                ],
             ],
         ],
     ],

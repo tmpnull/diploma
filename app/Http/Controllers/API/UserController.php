@@ -272,4 +272,48 @@ class UserController extends Controller
         $this->authorize('delete', User::class);
         return response($this->userService->destroy($id));
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @OAS\Get(
+     *     path="/api/user",
+     *     tags={"user"},
+     *     description=">-
+    Get current user info",
+     *     operationId="getUserById",
+     *     security={
+     *       {
+     *         "bearer": {},
+     *         "passport": {},
+     *       },
+     *     },
+     *     @OAS\Response(
+     *         response=200,
+     *         description="successful operation",
+     *         @OAS\MediaType(
+     *             mediaType="application/json",
+     *             @OAS\Schema(
+     *                 ref="#/components/schemas/User"
+     *             ),
+     *         ),
+     *     ),
+     *     @OAS\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @OAS\Response(
+     *         response=404,
+     *         description="Order not found"
+     *     ),
+     * )
+     *
+     * @param  int $id
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function me()
+    {
+        return response($this->userService->me());
+    }
 }

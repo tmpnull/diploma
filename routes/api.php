@@ -36,6 +36,7 @@ Route::group([
         'timetables' => 'API\TimetableController',
         'users' => 'API\UserController',
     ]);
-    Route::get('timetables/group/{id}', 'API\TimetableController@showByGroupId')->name('showTimetableByGroupId');
-    Route::get('timetables/teacher/{id}', 'API\TimetableController@showByTeacherId')->name('showTimetableByTeacherId');
+    Route::get('timetables/group/{id}', 'API\TimetableController@showByGroupId');
+    Route::get('timetables/teacher/{id}', 'API\TimetableController@showByTeacherId');
+    Route::get('user', 'API\UserController@me');
 });

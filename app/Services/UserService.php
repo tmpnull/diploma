@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\User;
 use App\Http\Resources\User as UserResource;
+use Illuminate\Support\Facades\Auth;
 
 class UserService
 {
@@ -16,11 +17,11 @@ class UserService
     }
 
     /**
-     * @param int $id
+     * @param int|string $id
      *
      * @return UserResource
      */
-    public function show(int $id)
+    public function show($id)
     {
         return UserResource::make(User::find($id));
     }
@@ -63,5 +64,10 @@ class UserService
     public function destroy(int $id)
     {
         return User::destroy($id);
+    }
+
+    public function me()
+    {
+        return UserResource::make(Auth::user());
     }
 }

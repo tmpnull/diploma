@@ -31,7 +31,7 @@ $factory->define(App\User::class, function (Faker $faker) {
     return [
         'name' => $faker->firstName,
         'email' => $faker->unique()->safeEmail,
-        'password' => bcrypt($faker->password), // secret
+        'password' => bcrypt('123456'),
         'surname' => $faker->lastName,
         'patronymic' => $faker->firstName,
         'date_of_birth' => $faker->date(),
