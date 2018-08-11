@@ -48,7 +48,8 @@ class AudienceController extends Controller
     public function index(Request $request)
     {
         $ip = $request->ip();
-        Log::info('Called AudienceController@index from ' . $ip);
+        Log::info('Called AudienceController@index from '.$ip);
+
         return response(AudienceResource::collection(Audience::all()));
     }
 
@@ -93,10 +94,14 @@ class AudienceController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(['name' => 'bail|required|unique:audiences|max:255', 'building_id' => 'required|exists:buildings,id',]);
+        $request->validate([
+            'name' => 'bail|required|unique:audiences|max:255',
+            'building_id' => 'required|exists:buildings,id',
+        ]);
 
         $audience = new Audience($request->toArray());
         $audience->save();
+
         return response(AudienceResource::make($audience));
     }
 
@@ -214,6 +219,7 @@ class AudienceController extends Controller
         /** @var Audience $audience */
         $audience = Audience::find($id);
         $audience->update($request->toArray());
+
         return response(AudienceResource::make($audience));
     }
 

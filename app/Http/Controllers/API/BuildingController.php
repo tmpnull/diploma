@@ -92,10 +92,14 @@ class BuildingController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(['name' => 'bail|required|unique:buildings|max:255', 'abbreviation' => 'required|unique:buildings',]);
+        $request->validate([
+            'name' => 'bail|required|unique:buildings|max:255',
+            'abbreviation' => 'required|unique:buildings',
+        ]);
 
         $building = new Building($request->toArray());
         $building->save();
+
         return response(BuildingResource::make($building));
     }
 

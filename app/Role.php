@@ -34,8 +34,13 @@ class Role extends Model
      */
     protected $fillable = ['name',];
 
+    /**
+     * Get the user records associated with the department.
+     *
+     * One-To-Many realisation.
+     */
     public function user()
     {
-        return $this->belongsToMany(User::class);
+        return $this->hasMany(User::class);
     }
 }

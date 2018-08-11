@@ -19,6 +19,7 @@ class InitialSeeder extends Seeder
             'surname' => 'test',
             'patronymic' => 'test',
         ]);
+        $user->role()->associate(\App\Role::where('name', 'superadmin')->first());
         $user->save();
     }
 }

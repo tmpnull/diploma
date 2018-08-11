@@ -10,7 +10,7 @@ class UserPolicy
     use HandlesAuthorization;
 
     public function view(User $user) {
-        return $user->authorizeRoles('Excavating Machine Operator105'); // TODO: Make constants
+        return $user->authorizeRoles('superadmin'); // TODO: Make constants
     }
 
     /**
@@ -21,7 +21,7 @@ class UserPolicy
      */
     public function create(User $user)
     {
-        return $user->authorizeRoles('Excavating Machine Operator105'); // TODO: Make constants
+        return $user->authorizeRoles('superadmin'); // TODO: Make constants
     }
 
     /**
@@ -32,7 +32,7 @@ class UserPolicy
      */
     public function update(User $user)
     {
-        return $user->authorizeRoles('Excavating Machine Operator105');
+        return $user->authorizeRoles('superadmin');
     }
 
     /**
@@ -43,6 +43,6 @@ class UserPolicy
      */
     public function delete(User $user)
     {
-        return $user->authorizeRoles('Excavating Machine Operator105');
+        return $user->authorizeRoles('superadmin');
     }
 }

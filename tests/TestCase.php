@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Role;
 use App\User;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\TestResponse;
@@ -49,6 +50,10 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        Passport::actingAs(factory(User::class)->create());
+        $superadmin = User::whereHas('role', function ($query) {
+            $query->where('name', 'like', 'superadmin');
+        })->get()->first();
+
+        Passport::actingAs($superadmin);
     }
 }

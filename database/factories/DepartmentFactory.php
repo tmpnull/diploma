@@ -14,12 +14,13 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(App\Department::class, function (Faker $faker) {
-    /** @var \App\Faculty $faculty */
-    $faculty = factory(App\Faculty::class, 1)->create()->first();
+    /** @var \Illuminate\Support\Collection $faculties */
+    $faculties = \App\Faculty::all();
+
     return [
-        'name' => $faker->unique()->name . $faker->randomNumber(3),
-        'abbreviation' => $faker->unique()->word . $faker->randomNumber(3),
+        'name' => $faker->unique()->name.$faker->randomNumber(3),
+        'abbreviation' => $faker->unique()->word.$faker->randomNumber(3),
         'number' => $faker->unique()->randomNumber(4) + $faker->unique()->randomNumber(4),
-        'faculty_id' => $faculty->getAttribute('id'),
+        'faculty_id' => $faculties->random()->id,
     ];
 });

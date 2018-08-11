@@ -259,7 +259,7 @@ class TimetableControllerTest extends TestCase
         ];
     }
 
-    /**
+    /*
      * TODO: Add query params tests for GET /api/timetables/{teacherID} endpoint and group.
      */
 

@@ -14,6 +14,20 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(App\User::class, function (Faker $faker) {
+    /**
+     * @var \Illuminate\Support\Collection $roles
+     * @var \App\Role $value
+     */
+    $roles = App\Role::all()->filter(function ($value) {
+        return $value->name === 'admin' || $value->name === 'manager';
+    });
+
+    /** @var \Illuminate\Support\Collection $degrees */
+    $degrees = App\Degree::all();
+
+    /** @var \Illuminate\Support\Collection $positions */
+    $positions = App\Degree::all();
+
     return [
         'name' => $faker->firstName,
         'email' => $faker->unique()->safeEmail,
@@ -24,5 +38,8 @@ $factory->define(App\User::class, function (Faker $faker) {
         'mobile_phone' => $faker->phoneNumber,
         'work_phone' => $faker->phoneNumber,
         'gender' => $faker->boolean,
+        'role_id' => $roles->random()->id,
+        'degree_id' => $degrees->random()->id,
+        'position_id' => $positions->random()->id,
     ];
 });

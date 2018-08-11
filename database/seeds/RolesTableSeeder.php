@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class RolesTableSeeder extends Seeder
 {
@@ -11,6 +12,12 @@ class RolesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Role::class, 5)->create();
+        DB::table('roles')->insert([
+            ['name' => 'superadmin'],
+            ['name' => 'admin'],
+            ['name' => 'manager'],
+            ['name' => 'student'],
+            ['name' => 'teacher'],
+        ]);
     }
 }

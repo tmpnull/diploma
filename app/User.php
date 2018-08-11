@@ -133,6 +133,16 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
+
+    public function teacher()
+    {
+        return $this->hasOne(Teacher::class);
+    }
+
     /**
      * Get the position record associated with the department.
      *

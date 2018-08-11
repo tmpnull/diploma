@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ConfigurationsTableSeeder extends Seeder
 {
@@ -11,6 +12,15 @@ class ConfigurationsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Configuration::class, 5)->create();
+        DB::table('configurations')->insert([
+            [
+                'key' => 'start_of_first_semester',
+                'value' => '2018-09-01',
+            ],
+            [
+                'key' => 'start_of_second_semester',
+                'value' => '2019-01-14',
+            ],
+        ]);
     }
 }

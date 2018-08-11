@@ -9,25 +9,34 @@ class TimetableQueryParameters
 {
     /** @var string $period */
     private $semester;
+
     /** @var string $dividend */
     private $dividend;
+
     /** @var string $sortBy */
     private $sortBy;
+
     /** @var Carbon $date */
     private $date;
+
     /** @var int $day */
     private $day;
 
     public static $DIVIDEND_NUMERATOR = 'numerator';
+
     public static $DIVIDEND_DENOMINATOR = 'denominator';
+
     public static $DIVIDEND_AUTO = 'auto';
+
     public static $SEMESTER_FIRST = 'first';
+
     public static $SEMESTER_SECOND = 'second';
+
     public static $SEMESTER_AUTO = 'auto';
 
     public function __construct(Request $request = null)
     {
-        if (! $request) {
+        if (!$request) {
             return;
         }
         $this->dividend = $request->get('dividend') ?: null;

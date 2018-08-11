@@ -36,6 +36,7 @@ class UserService
         $user = new User($data);
         $user->setAttribute('password', bcrypt($user->getAttribute('password')));
         $user->save();
+
         return UserResource::make($user);
     }
 
@@ -50,6 +51,7 @@ class UserService
         /** @var User $user */
         $user = User::find($id);
         $user->update($data);
+
         return UserResource::make($user);
     }
 

@@ -14,11 +14,12 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(App\Speciality::class, function (Faker $faker) {
-    /** @var \App\Department $department */
-    $department = factory(App\Department::class, 1)->create()->first();
+    /** @var \Illuminate\Support\Collection $departments */
+    $departments = \App\Department::all();
+
     return [
         'name' => $faker->unique()->word . $faker->randomNumber(3),
         'number' => $faker->unique()->randomNumber(4) + $faker->unique()->randomNumber(4),
-        'department_id' => $department->getAttribute('id'),
+        'department_id' => $departments->random()->id,
     ];
 });

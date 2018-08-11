@@ -18,7 +18,7 @@ class TimetablePolicy
      */
     public function create(User $user)
     {
-        return $user->authorizeRoles('Excavating Machine Operator105');
+        return $user->authorizeRoles('superadmin');
     }
 
     /**
@@ -29,7 +29,7 @@ class TimetablePolicy
      */
     public function update(User $user)
     {
-        return $user->authorizeRoles('Excavating Machine Operator105');
+        return $user->authorizeRoles('superadmin');
     }
 
     /**
@@ -40,6 +40,6 @@ class TimetablePolicy
      */
     public function delete(User $user)
     {
-        return $user->authorizeRoles('Excavating Machine Operator105');
+        return $user->authorizeRoles('superadmin');
     }
 }
