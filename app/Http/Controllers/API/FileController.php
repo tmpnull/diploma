@@ -6,6 +6,8 @@ use App\File;
 use App\Http\Resources\File as FileResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Swagger\Annotations as OAS;
 
 class FileController extends Controller
@@ -86,18 +88,30 @@ class FileController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'bail|required|unique:files|max:255',
-            'user_id' => 'required|exists:users,id',
+        /** @var \Illuminate\Http\UploadedFile $fileFromRequest */
+        $fileFromRequest = $request->file()['photo'];
+
+        $file = new File([
+            'name' => $fileFromRequest->getClientOriginalName(),
+            'user_id' => Auth::user()->id,
         ]);
 
-        $file = new File($request->toArray());
+        if ($request->get('public') === 'true') {
+            $fileName = Storage::disk('public')->put($file->user->id, $fileFromRequest);
+            $file->is_public = true;
+        } else {
+            $fileName = Storage::disk('local')->put($file->user->id, $fileFromRequest);
+            $file->is_public = false;
+        }
+
+        $file->path = $fileName;
         $file->save();
+
         return response(FileResource::make($file));
     }
 
@@ -148,7 +162,7 @@ class FileController extends Controller
      *     ),
      * )
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -203,8 +217,8 @@ class FileController extends Controller
      *     ),
      * )
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -254,11 +268,22 @@ class FileController extends Controller
      *     )
      * ),
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         return response(File::destroy($id));
+    }
+
+    public function download($id)
+    {
+        $file = File::find($id);
+
+        if ($file->is_public) {
+            return Storage::get('/public/'.$file->path);
+        }
+
+        return Storage::get($file->path);
     }
 }

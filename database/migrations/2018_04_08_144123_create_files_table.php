@@ -19,6 +19,7 @@ class CreateFilesTable extends Migration
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('path')->nullable()->unique();
+            $table->boolean('is_public')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

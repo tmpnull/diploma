@@ -37,22 +37,15 @@ class File extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'user_id', 'path',];
+    protected $fillable = ['name', 'user_id', 'path', 'is_public'];
 
     /**
      * Get the user record associated with the department.
      *
      * Many-To-One realisation.
      */
-    public function faculty()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = ['path',];
 }

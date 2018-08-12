@@ -39,4 +39,5 @@ Route::group([
     Route::get('timetables/group/{id}', 'API\TimetableController@showByGroupId');
     Route::get('timetables/teacher/{id}', 'API\TimetableController@showByTeacherId');
     Route::get('user', 'API\UserController@me');
+    Route::get('files/download/{id}', 'API\FileController@download');
 });
