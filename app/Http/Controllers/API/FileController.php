@@ -93,6 +93,11 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'photo' => 'bail|required|image',
+            'public' => 'boolean',
+        ]);
+
         /** @var \Illuminate\Http\UploadedFile $fileFromRequest */
         $fileFromRequest = $request->file()['photo'];
 

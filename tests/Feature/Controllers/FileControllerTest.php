@@ -3,7 +3,7 @@
 namespace Tests\Feature\Controllers;
 
 use App\File;
-use App\User;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -17,16 +17,20 @@ class FileControllerTest extends TestCase
     /** @var File */
     private $file;
 
+    private $image;
+
     protected function setUp()
     {
         parent::setUp();
-        /** @var User $user */
-        $user = factory(User::class, 1)->create()->first();
-        $this->file = new File([
-            'name' => $this->faker->word(),
-            'user_id' => $user->getAttribute('id'),
+
+        $this->image = UploadedFile::fake()->image('avatar.jpg');
+
+        $response = $this->postJson($this->baseUrl, [
+            'photo' => $this->image,
+            'public' => false,
         ]);
-        $response = $this->postJson($this->baseUrl, $this->file->toArray());
+
+        $this->file = new File($response->json());
         $this->file->setAttribute('id', $response->json()['id']);
     }
 
@@ -67,15 +71,10 @@ class FileControllerTest extends TestCase
     public function missedFieldsDataProvider()
     {
         return [
-            'no name' => [
-                new File([
-                    'user_id' => 1,
-                ]),
-            ],
-            'no user_id' => [
-                new File([
-                    'name' => 'asdasd',
-                ]),
+            'no photo' => [
+                [
+                    'public' => false,
+                ],
             ],
         ];
     }
@@ -84,16 +83,9 @@ class FileControllerTest extends TestCase
      * @dataProvider missedFieldsDataProvider
      * @param File $file
      */
-    public function testInsertFileWithoutRequiredFields(File $file)
+    public function testInsertFileWithoutRequiredFields($file)
     {
-        $response = $this->postJson($this->baseUrl, $file->toArray());
-        $response->assertStatus(422);
-    }
-
-    public function testInsertFileWithRepeatedValue()
-    {
-        $this->postJson($this->baseUrl, $this->file->toArray());
-        $response = $this->postJson($this->baseUrl, $this->file->toArray());
+        $response = $this->postJson($this->baseUrl, $file);
         $response->assertStatus(422);
     }
 }
