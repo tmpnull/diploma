@@ -106,7 +106,7 @@ class FileController extends Controller
             'user_id' => Auth::user()->id,
         ]);
 
-        if ($request->get('public') === 'true') {
+        if ($request->get('public')) {
             $fileName = Storage::disk('public')->put($file->user->id, $fileFromRequest);
             $file->is_public = true;
         } else {

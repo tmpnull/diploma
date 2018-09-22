@@ -84,6 +84,7 @@
 
                 <div class="links">
                     <a href="/api">{{ __('routes.documentation') }}</a>
+                    <a href="/timetable">{{ __('routes.timetable') }}</a>
                     <a href="https://github.com/kornevdima/diploma">GitHub</a>
                 </div>
             </div>

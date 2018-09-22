@@ -136,7 +136,7 @@ class TimetableService
             $requested = $semester === TimetableQueryParameters::$SEMESTER_FIRST;
 
             $collection = $collection->filter(function (Timetable $timetable) use ($requested) {
-                return (bool)$timetable->getAttribute('is_first_semester') === $requested;
+                return (bool) $timetable->getAttribute('is_first_semester') === $requested;
             });
         }
 
@@ -154,19 +154,24 @@ class TimetableService
     {
         if ($queryParameters->getDividend()) {
             $dividend = $queryParameters->getDividend();
-            if ($dividend === TimetableQueryParameters::$DIVIDEND_AUTO) {
-                $date = $queryParameters->getDate();
+            if ($dividend === TimetableQueryParameters::$DIVIDEND_AUTO || !$dividend) {
+                $date = $queryParameters->getDate() ?: new Carbon();
                 if ($date) {
-                    $date->between($datesOfStartSemesters->get(0), $datesOfStartSemesters->get(1)) ? $weekOfSemesterStart = $datesOfStartSemesters->get(0)->weekOfYear : $weekOfSemesterStart = $datesOfStartSemesters->get(1)->weekOfYear;
+                    $date->between($datesOfStartSemesters->get(0), $datesOfStartSemesters->get(1))
+                        ? $weekOfSemesterStart = $datesOfStartSemesters->get(0)->weekOfYear
+                        : $weekOfSemesterStart = $datesOfStartSemesters->get(1)->weekOfYear;
                     $weekNumber = $date->weekOfYear;
-                    $dividend = $this->isNumerator($weekOfSemesterStart, $weekNumber) ? TimetableQueryParameters::$DIVIDEND_NUMERATOR : TimetableQueryParameters::$DIVIDEND_DENOMINATOR;
+                    $dividend = $this->isNumerator($weekOfSemesterStart, $weekNumber)
+                        ? TimetableQueryParameters::$DIVIDEND_NUMERATOR
+                        : TimetableQueryParameters::$DIVIDEND_DENOMINATOR;
                 }
             }
 
             $requested = $dividend === TimetableQueryParameters::$DIVIDEND_NUMERATOR;
 
             $collection = $collection->filter(function (Timetable $timetable) use ($requested) {
-                return (bool)$timetable->getAttribute('is_numerator') === $requested;
+                return (bool) $timetable->getAttribute('is_numerator') === $requested
+                    || $timetable->getAttribute('is_numerator') === null;
             });
         }
 
@@ -182,9 +187,14 @@ class TimetableService
     private function filterByDay($collection, $queryParameters)
     {
         $day = $queryParameters->getDay();
+        $date = $queryParameters->getDate();
         if ($day) {
             $collection = $collection->filter(function (Timetable $value, $key) use ($day) {
                 return $value->getAttribute('day_of_week') === $day;
+            });
+        } elseif ($date) {
+            $collection = $collection->filter(function (Timetable $value, $key) use ($date) {
+                return $value->getAttribute('day_of_week') === $date->dayOfWeek;
             });
         }
 
@@ -213,7 +223,10 @@ class TimetableService
     private function getDatesOfStartSemesters(): \Illuminate\Support\Collection
     {
         /** @var \Illuminate\Database\Eloquent\Collection $datesOfStartSemesters */
-        $datesOfStartSemesters = Configuration::whereIn('key', ['start_of_first_semester', 'start_of_second_semester',])->get()->map(function ($item) {
+        $datesOfStartSemesters = Configuration::whereIn('key', [
+            'start_of_first_semester',
+            'start_of_second_semester',
+        ])->get()->map(function ($item) {
             return new Carbon($item->getAttribute('value'));
         });
 

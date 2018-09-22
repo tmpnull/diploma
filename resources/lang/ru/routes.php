@@ -16,5 +16,6 @@ return [
     'documentation' => 'Документация API',
     'login' => 'Войти',
     'register' => 'Зарегистрироваться',
+    'timetable' => 'Расписание',
 
 ];

@@ -2,12 +2,17 @@
     "private": true,
     "scripts": {
         "dev": "npm run development",
-        "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "development": "cross-env process.env.section=server NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch": "npm run development -- --watch",
         "watch-poll": "npm run watch -- --watch-poll",
-        "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "hot": "cross-env process.env.section=server NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
         "prod": "npm run production",
-        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+        "production": "cross-env process.env.section=server NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "development-spa": "cross-env process.env.section=spa NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "watch-spa": "npm run development-spa -- --watch",
+        "watch-poll-spa": "npm run development-spa -- --watch-poll",
+        "prod-spa": "npm run production",
+        "production-spa": "cross-env process.env.section=spa NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
         "axios": "^0.18",
@@ -18,5 +23,9 @@
         "laravel-mix": "^2.0",
         "lodash": "^4.17.4",
         "vue": "^2.5.7"
+    },
+    "dependencies": {
+        "vue-material": "^1.0.0-beta-10.2",
+        "vue-router": "^3.0.1"
     }
 }

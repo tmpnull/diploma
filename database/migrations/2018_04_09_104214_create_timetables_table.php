@@ -17,7 +17,7 @@ class CreateTimetablesTable extends Migration
             $table->increments('id');
             $table->integer('day_of_week');
             $table->integer('number');
-            $table->boolean('is_numerator');
+            $table->boolean('is_numerator')->nullable();
             $table->boolean('is_first_semester');
             $table->unsignedInteger('course_id')->nullable();
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');

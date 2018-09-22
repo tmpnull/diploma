@@ -152,7 +152,7 @@ class TeacherController extends Controller
      */
     public function show($id)
     {
-        return response(TeacherResource::make(Teacher::find($id)));
+        return response(TeacherResource::make(Teacher::with('user')->find($id)));
     }
 
     /**

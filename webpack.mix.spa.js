@@ -11,6 +11,4 @@ let mix = require('laravel-mix');
  |
  */
 
-if (process.env.section) {
-    require(`${__dirname}/webpack.mix.${process.env.section}.js`);
-}
+mix.js('resources/assets/spa/js/index.js', 'public/spa/js');

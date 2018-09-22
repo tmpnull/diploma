@@ -16,5 +16,6 @@ return [
     'documentation' => 'API Documentation',
     'login' => 'Login',
     'register' => 'Register',
+    'timetable' => 'Timetable',
 
 ];
