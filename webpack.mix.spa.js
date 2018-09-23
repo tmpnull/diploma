@@ -11,4 +11,21 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/assets/spa/js/index.js', 'public/spa/js');
+mix.config.babelConfig = {
+    presets: [
+        'babel-preset-env',
+    ],
+    plugins: ['babel-plugin-syntax-dynamic-import'],
+};
+
+mix.webpackConfig({
+    resolve: {
+        alias: {
+            '@': path.resolve('resources/assets/spa/'),
+        },
+    }
+});
+
+mix.js('resources/assets/spa/main.js', 'public/spa')
+    .sourceMaps()
+    .browserSync('homestead.test/timetable');

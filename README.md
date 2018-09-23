@@ -2,7 +2,9 @@
 ## RESTful application for manage schedule hosted by Laravel
 
 **To deploy this application you need to follow next steps:**
-1. Install [Homestead by Laravel](https://laravel.com/docs/5.6/homestead)
+1. Install [Homestead by Laravel](https://laravel.com/docs/5.6/homestead) with next plugins:
+   1. vagrant-bindfs (If you are using Mac with NFS)
+   2. vagrant-hostmanager
    
    **If you want to run PHP Unit tests, you need to add following changes in *Homestead.yaml*:**
    1. Add "*homestead_test*" to databases list right after the "*homestead*"

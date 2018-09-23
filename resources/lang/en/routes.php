@@ -15,6 +15,7 @@ return [
     'home' => 'Home',
     'documentation' => 'API Documentation',
     'login' => 'Login',
+    'logout' => 'Logout',
     'register' => 'Register',
     'timetable' => 'Timetable',
 

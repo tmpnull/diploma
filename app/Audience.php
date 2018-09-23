@@ -44,7 +44,7 @@ class Audience extends Model
      *
      * Many-To-One realisation.
      */
-    public function faculty()
+    public function building()
     {
         return $this->belongsTo(Building::class);
     }

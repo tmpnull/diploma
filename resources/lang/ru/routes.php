@@ -15,6 +15,7 @@ return [
     'home' => 'Главная',
     'documentation' => 'Документация API',
     'login' => 'Войти',
+    'logout' => 'Выйти',
     'register' => 'Зарегистрироваться',
     'timetable' => 'Расписание',
 

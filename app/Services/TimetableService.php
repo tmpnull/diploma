@@ -8,17 +8,30 @@ use App\Timetable;
 use App\Http\Resources\Timetable as TimetableResource;
 use App\QueryParameters\TimetableQueryParameters;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 use Carbon\Carbon;
 
 class TimetableService
 {
     /**
-     * @return ResourceCollection
+     * @return array
      */
-    public function index(): ResourceCollection
+    public function index(): TimetableResource
     {
-        return TimetableResource::collection(Timetable::all());
+        //$groupedTimeTable = Timetable::with([
+        //    'group',
+        //    'course.teacher.user',
+        //    'audience.building',
+        //])->get()->groupBy('group_id')->reduce(function ($groupedTimeTable, $elem) {
+        //    $groupedTimeTable[$elem[0]['group_id']] = $elem;
+        //
+        //    return $groupedTimeTable;
+        //}, Collection::make());
+
+        return TimetableResource::make(Timetable::with([
+            'group',
+            'course.teacher.user',
+            'audience.building',
+        ])->get()->groupBy('group_id'));
     }
 
     /**
@@ -39,7 +52,11 @@ class TimetableService
      */
     public function showByGroupId(int $id, TimetableQueryParameters $queryParameters): TimetableResource
     {
-        $timetables = Timetable::where('group_id', $id)->get();
+        $timetables = Timetable::with([
+            'group',
+            'course.teacher.user',
+            'audience.building',
+        ])->where('group_id', $id)->get();
         $datesOfStartSemesters = $this->getDatesOfStartSemesters();
 
         if ($datesOfStartSemesters->count() < 2) {
@@ -154,24 +171,19 @@ class TimetableService
     {
         if ($queryParameters->getDividend()) {
             $dividend = $queryParameters->getDividend();
-            if ($dividend === TimetableQueryParameters::$DIVIDEND_AUTO || !$dividend) {
+            if ($dividend === TimetableQueryParameters::$DIVIDEND_AUTO || ! $dividend) {
                 $date = $queryParameters->getDate() ?: new Carbon();
                 if ($date) {
-                    $date->between($datesOfStartSemesters->get(0), $datesOfStartSemesters->get(1))
-                        ? $weekOfSemesterStart = $datesOfStartSemesters->get(0)->weekOfYear
-                        : $weekOfSemesterStart = $datesOfStartSemesters->get(1)->weekOfYear;
+                    $date->between($datesOfStartSemesters->get(0), $datesOfStartSemesters->get(1)) ? $weekOfSemesterStart = $datesOfStartSemesters->get(0)->weekOfYear : $weekOfSemesterStart = $datesOfStartSemesters->get(1)->weekOfYear;
                     $weekNumber = $date->weekOfYear;
-                    $dividend = $this->isNumerator($weekOfSemesterStart, $weekNumber)
-                        ? TimetableQueryParameters::$DIVIDEND_NUMERATOR
-                        : TimetableQueryParameters::$DIVIDEND_DENOMINATOR;
+                    $dividend = $this->isNumerator($weekOfSemesterStart, $weekNumber) ? TimetableQueryParameters::$DIVIDEND_NUMERATOR : TimetableQueryParameters::$DIVIDEND_DENOMINATOR;
                 }
             }
 
             $requested = $dividend === TimetableQueryParameters::$DIVIDEND_NUMERATOR;
 
             $collection = $collection->filter(function (Timetable $timetable) use ($requested) {
-                return (bool) $timetable->getAttribute('is_numerator') === $requested
-                    || $timetable->getAttribute('is_numerator') === null;
+                return (bool) $timetable->getAttribute('is_numerator') === $requested || $timetable->getAttribute('is_numerator') === null;
             });
         }
 

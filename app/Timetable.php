@@ -79,7 +79,7 @@ class Timetable extends Model
      */
     public function course()
     {
-        return $this->hasMany(Course::class);
+        return $this->belongsTo(Course::class);
     }
 
     /**
@@ -89,7 +89,7 @@ class Timetable extends Model
      */
     public function group()
     {
-        return $this->hasMany(Group::class);
+        return $this->belongsTo(Group::class);
     }
 
     /**
@@ -99,6 +99,6 @@ class Timetable extends Model
      */
     public function audience()
     {
-        return $this->hasMany(Audience::class);
+        return $this->belongsTo(Audience::class);
     }
 }
