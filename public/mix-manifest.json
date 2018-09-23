@@ -1,3 +1,4 @@
 {
-    "/spa/main.js": "/spa/main.js"
+    "/spa/main.js": "/spa/main.js",
+    "/spa/main.js.map": "/spa/main.js.map"
 }
