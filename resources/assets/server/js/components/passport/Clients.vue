@@ -123,6 +123,9 @@
                                     <span class="form-text text-muted">
                                         Your application's authorization callback URL.
                                     </span>
+                                    <span class="form-text text-muted">
+                                        For Swagger Documentation: http://homestead.test/api/oauth2-callback
+                                    </span>
                                 </div>
                             </div>
                         </form>

@@ -6,7 +6,7 @@
                     <md-icon>menu</md-icon>
                 </md-button>
 
-                <span class="md-title">Расписание</span>
+                <span class="md-title">{{title}}</span>
             </div>
 
             <div class="md-toolbar-section-end">
@@ -33,6 +33,11 @@
             <md-toolbar class="md-transparent" md-elevation="0">Навигация</md-toolbar>
 
             <md-list>
+                <md-list-item v-if="$acl.check('isManager')">
+                    <md-icon>edit</md-icon>
+                    <router-link class="md-list-item-text" to="/timetable/edit">Редактор расписания</router-link>
+                </md-list-item>
+
                 <md-list-item>
                     <md-icon>list</md-icon>
                     <router-link class="md-list-item-text" to="/timetable/">Расписание</router-link>
@@ -56,24 +61,22 @@
 
     import axios from 'axios';
 
-    axios.defaults.headers.common = {
-        'X-Requested-With': 'XMLHttpRequest',
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-    };
-
     export default {
         name: 'App',
         data: () => ({
             menuVisible: false,
         }),
-        computed: mapState({
-            currentUser: state => state.user.current,
-        }),
-        async mounted() {
-            this.$store.dispatch('user/getCurrentUser');
+        computed: {
+            title() {
+                const matchedRoute = this.$route.matched[0];
+                return matchedRoute ? matchedRoute.props.default.pageTitle : '404';
+            },
+            ...mapState({
+                currentUser: state => state.user.current,
+            }),
         },
         methods: {
-            logout: async function() {
+            logout: async function () {
                 await axios.post('/logout', {});
                 window.location.href = '/';
             },

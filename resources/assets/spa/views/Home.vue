@@ -1,7 +1,5 @@
 <template>
-    <div>
-        <Timetable v-bind:timetable="timetable" v-bind:groups="groups" />
-    </div>
+    <Timetable v-bind:timetable="timetable" v-bind:groups="groups" />
 </template>
 
 <script>

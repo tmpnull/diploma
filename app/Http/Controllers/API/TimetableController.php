@@ -111,7 +111,7 @@ class TimetableController extends Controller
                 group_id,audience_id',
             'day_of_week' => 'required',
             'number' => 'required',
-            'is_numerator' => 'required',
+            'is_numerator' => 'nullable',
             'is_first_semester' => 'required',
             'group_id' => 'required|exists:groups,id',
             'audience_id' => 'required|exists:audiences,id',

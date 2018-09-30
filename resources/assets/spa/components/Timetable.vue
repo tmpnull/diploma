@@ -18,7 +18,7 @@
 
                 <div v-show="selectedGroup">
                     <md-datepicker v-model="selectedDate">
-                        <label>Select date</label>
+                        <label>Выберите дату</label>
                     </md-datepicker>
                 </div>
 
@@ -153,9 +153,11 @@
                 }
 
                 try {
-                    this.$store.dispatch('timetable/getByGroupWithDate', {
+                    this.$store.dispatch('timetable/getByGroupWithParams', {
                         id: this.selectedGroup,
-                        date: moment(this.selectedDate).format('YYYY-MM-DD'),
+                        query: {
+                            date: moment(this.selectedDate).format('YYYY-MM-DD'),
+                        },
                     });
                 } catch (e) {
                     this.loading = false;
@@ -178,14 +180,24 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-    .timetable-row {
-        vertical-align: top;
+    .timetable {
+        &-row {
+            vertical-align: top;
 
-        .md-list-item-text {
-            width: 15rem;
-            margin-left: 1rem;
-            margin-right: 1rem;
-            white-space: pre-wrap;
+            .md-list-item-text {
+                width: 15rem;
+                margin-left: 1rem;
+                margin-right: 1rem;
+                white-space: pre-wrap;
+            }
+
+            & /deep/ .md-table-cell:nth-child(1) {
+                vertical-align: middle;
+            }
+        }
+
+        & /deep/ .md-table-head {
+            text-align: center;
         }
     }
 </style>

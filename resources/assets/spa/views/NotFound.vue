@@ -16,17 +16,17 @@
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
     $bgColor: #f7f7f7;
     $jaggedDistance: 32px;
 
     // boo
-$booSize: $jaggedDistance * 5;
+    $booSize: $jaggedDistance * 5;
     $booBg: $bgColor;
     $booShadow: darken($booBg, 5%);
 
     // face
-$booFaceSize: round($jaggedDistance / 1.3333);
+    $booFaceSize: round($jaggedDistance / 1.3333);
     $booFaceColor: #9b9b9b;
 
     // ===========
@@ -67,22 +67,20 @@ $booFaceSize: round($jaggedDistance / 1.3333);
         position: relative;
         padding-bottom: $size;
 
-    &::after {
-         content: '';
-         display: block;
-         position: absolute;
-         left: -($size / 1.7);
-         bottom: -($jaggedDistance / 3.85);
-         width: calc(100% + #{$size});
-         height: $size;
-         background-repeat: repeat-x;
-         background-size: $size $size;
-         background-position: left bottom;
-         background-image: linear-gradient(-45deg, $color-outer ($size / 2), transparent 0),
-     linear-gradient(45deg, $color-outer ($size / 2), transparent 0),
-     linear-gradient(-45deg, $booFaceColor ($size / 1.7), transparent 0),
-     linear-gradient(45deg, $booFaceColor ($size / 1.7), transparent 0);
-     }
+        &::after {
+            content: '';
+            display: block;
+            position: absolute;
+            left: -($size / 1.7);
+            bottom: -($jaggedDistance / 3.85);
+            width: calc(100% + #{$size});
+            height: $size;
+            background-size: $size $size;
+            background: linear-gradient(-45deg, $color-outer ($size / 2), transparent 0),
+            linear-gradient(45deg, $color-outer ($size / 2), transparent 0),
+            linear-gradient(-45deg, $booFaceColor ($size / 1.7), transparent 0),
+            linear-gradient(45deg, $booFaceColor ($size / 1.7), transparent 0) repeat-x left bottom;
+        }
     }
 
     // ===========
@@ -99,10 +97,10 @@ $booFaceSize: round($jaggedDistance / 1.3333);
         text-align: center;
         font-size: $jaggedDistance / 2;
 
-    h1 {
-        font-size: $jaggedDistance;
-        margin-top: $jaggedDistance;
-    }
+        h1 {
+            font-size: $jaggedDistance;
+            margin-top: $jaggedDistance;
+        }
     }
 
     .boo-wrapper {
@@ -126,39 +124,39 @@ $booFaceSize: round($jaggedDistance / 1.3333);
         overflow: hidden;
         border-radius: ($booSize / 2) ($booSize / 2) 0 0;
         box-shadow: -($jaggedDistance / 2) 0 0 2px rgba($booShadow, .5) inset;
-    @include border-bottom-jagged($jaggedDistance, $bgColor);
+        @include border-bottom-jagged($jaggedDistance, $bgColor);
         animation: floating 3s ease-in-out infinite;
 
-    .face {
-        width: $booFaceSize;
-        height: $jaggedDistance / 10;
-        border-radius: 5px;
-        background-color: $booFaceColor;
-        position: absolute;
-        left: 50%;
-        bottom: $jaggedDistance + $booFaceSize;
-        transform: translateX(-50%);
+        .face {
+            width: $booFaceSize;
+            height: $jaggedDistance / 10;
+            border-radius: 5px;
+            background-color: $booFaceColor;
+            position: absolute;
+            left: 50%;
+            bottom: $jaggedDistance + $booFaceSize;
+            transform: translateX(-50%);
 
-    &::before,
-    &::after {
-         content: '';
-         display: block;
-         width: $booFaceSize / 4;
-         height: $booFaceSize / 4;
-         background-color: $booFaceColor;
-         border-radius: 50%;
-         position: absolute;
-         bottom: $jaggedDistance + ($booFaceSize / 3);
-     }
+            &::before,
+            &::after {
+                content: '';
+                display: block;
+                width: $booFaceSize / 4;
+                height: $booFaceSize / 4;
+                background-color: $booFaceColor;
+                border-radius: 50%;
+                position: absolute;
+                bottom: $jaggedDistance + ($booFaceSize / 3);
+            }
 
-    &::before {
-         left: -$booFaceSize;
-     }
+            &::before {
+                left: -$booFaceSize;
+            }
 
-    &::after {
-         right: -$booFaceSize;
-     }
-    }
+            &::after {
+                right: -$booFaceSize;
+            }
+        }
     }
 
     .shadow {
@@ -172,3 +170,9 @@ $booFaceSize: round($jaggedDistance / 1.3333);
         animation: floatingShadow 3s ease-in-out infinite;
     }
 </style>
+
+<script>
+    export default {
+        name: 'notFound',
+    };
+</script>

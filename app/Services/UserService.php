@@ -68,6 +68,6 @@ class UserService
 
     public function me()
     {
-        return UserResource::make(Auth::user());
+        return UserResource::make(User::with('role')->find(Auth::user()['id']));
     }
 }

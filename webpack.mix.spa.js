@@ -27,5 +27,4 @@ mix.webpackConfig({
 });
 
 mix.js('resources/assets/spa/main.js', 'public/spa')
-    .sourceMaps()
-    .browserSync('homestead.test/timetable');
+    .sourceMaps();
